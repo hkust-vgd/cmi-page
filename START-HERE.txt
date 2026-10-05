@@ -1,0 +1,16 @@
+CMI WEBSITE — OFFLINE EDITION
+5 October 2026 · Version 5
+
+1. Extract the entire ZIP file.
+2. Open the CMI-website-offline folder.
+3. Double-click index.html to open the homepage in your browser.
+
+All ten pages, research figures, portraits, styles and navigation are included.
+Keep the folder contents together so links and images continue to work.
+No installation, local server or internet connection is needed to browse the site.
+Links to faculty profiles, project websites and other external resources require internet access.
+
+This edition includes the larger leadership portraits and updated Research overview.
+Image credits are on the About page.
+
+DM Sans and Manrope fonts are embedded for offline use; their licenses are included in assets/font-licenses.
