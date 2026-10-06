@@ -1,0 +1,137 @@
+/* Resources & Collaborators pages: additions on top of the CMI style.css (reuses its tokens). */
+
+/* Jump links: counts instead of direction numbers */
+.resource-jumps{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+/* Dataset groups ("Coral reefs", "Marine life") */
+.resource-section{padding-bottom:40px;scroll-margin-top:130px}
+.resource-section>.section-heading{margin:56px 0 8px}
+.resource-section>.section-heading p{color:var(--muted);max-width:520px;margin:0;font-size:1rem}
+.resource-group{margin-top:40px}
+.resource-group>h3{font-size:1.5rem;margin-bottom:0;display:flex;align-items:center;gap:24px;scroll-margin-top:130px}
+.resource-group>h3:after{content:'';flex:1;height:1px;background:var(--line)}
+.resource-group>h3 small{font:600 .8125rem/1 'DM Sans',Arial,sans-serif;letter-spacing:.06em;color:var(--blue);order:2}
+
+/* Alternating rows: thumbnail | text, then text | thumbnail */
+.resource-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.resource-row:nth-of-type(even) .direction-visual{order:2}
+.rail>.resource-row:first-child{border-top:0}
+
+/* Whole image always visible: no cropping of figures or title art */
+.resource-media{display:grid;place-items:center;aspect-ratio:16/10;width:100%;max-width:100%;overflow:hidden}
+.resource-media img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;transition:transform .3s}
+.direction-visual>a:hover .resource-media img{transform:scale(1.02)}
+
+.venue-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:14px}
+.venue-line .eyebrow{margin:0}
+.badge{font-size:.6875rem;line-height:1;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--blue);padding:6px 9px;border-radius:5px}
+.full-title{font-size:1rem;font-weight:600;color:var(--ink);margin:-8px 0 14px;line-height:1.5}
+
+.stats{display:flex;flex-wrap:wrap;gap:12px 36px;margin:0 0 20px;padding:0}
+.stats div{display:flex;flex-direction:column}
+.stats dt{order:2;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stats dd{order:1;margin:0;font:700 1.6rem/1.2 Manrope,Arial,sans-serif;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+
+.feature-list{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:8px}
+.feature-list li{position:relative;padding-left:22px;font-size:1rem;color:var(--muted)}
+.feature-list li:before{content:'';position:absolute;left:2px;top:.65em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+
+/* Facilities placeholder */
+.placeholder{margin-top:28px;border:1.5px dashed var(--line);border-radius:16px;background:var(--pale);padding:40px;display:grid;gap:6px}
+.placeholder b{font:700 1.375rem/1.3 Manrope,Arial,sans-serif;letter-spacing:-.02em}
+.placeholder p{margin:0;color:var(--muted);max-width:640px}
+
+
+@media(max-width:980px){.resource-jumps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+  .resource-row{grid-template-columns:1fr}
+  .resource-row:nth-of-type(even) .direction-visual{order:0}
+  .placeholder{padding:28px 24px}
+}
+
+/* Vertical timeline rail beside each dataset group (newest at top, arrow points to the present) */
+.rail{position:relative;padding-left:170px;margin-top:22px}
+.rail:before{content:'';position:absolute;left:131px;top:8px;bottom:0;width:3px;border-radius:2px;background:linear-gradient(180deg,var(--blue),var(--sky))}
+.rail:after{content:'';position:absolute;left:126px;top:-6px;border:6.5px solid transparent;border-bottom:11px solid var(--blue);border-top:0}
+.resource-row{position:relative}
+.rail-mark{position:absolute;left:-170px;top:50%;transform:translateY(-50%);width:120px;display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:4px}
+.rail-mark:after{content:'';position:absolute;right:-21px;top:50%;width:17px;height:17px;margin-top:-8.5px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 5px #fff}
+.rail-mark.same:after{width:13px;height:13px;margin-top:-6.5px;right:-19px;background:#fff;border:3px solid var(--blue);box-sizing:border-box}
+.rail-yr{font:700 1.75rem/1 Manrope,Arial,sans-serif;letter-spacing:-.04em;color:var(--ink)}
+.rail-venue{font-size:.6875rem;line-height:1.35;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+@media(max-width:1100px){
+  .rail{padding-left:130px}
+  .rail:before{left:96px}
+  .rail:after{left:91px}
+  .rail-mark{left:-130px;width:88px}
+  .rail-yr{font-size:1.4rem}
+  .rail-mark:after{right:-18px}
+  .rail-mark.same:after{right:-16px}
+}
+@media(max-width:700px){
+  .rail{padding-left:30px}
+  .rail:before{left:6px;top:4px}
+  .rail:after{left:1px;top:-10px}
+  .resource-row{padding-top:60px}
+  .rail-mark{left:0;top:22px;transform:none;width:auto;flex-direction:row;align-items:baseline;gap:10px;text-align:left}
+  .rail-mark:after,.rail-mark.same:after{right:auto;left:-31px;top:8px;margin-top:0}
+  .rail-mark.same:after{left:-29px}
+  .rail-yr{font-size:1.375rem}
+}
+
+/* ---------- Collaborators: map + logo wall ---------- */
+.collab-stats{margin:30px 0 0}
+.collab-stats dd{color:var(--blue);font-size:2.4rem}
+.map-section{padding-bottom:56px}
+.world{display:block;width:100%;height:auto;background:var(--pale);border-radius:22px;padding:18px 10px}
+.world .land path{fill:#d6e6f3;stroke:#fff;stroke-width:.6;transition:fill .25s}
+.world .land path.hl{fill:#7fbbe6}
+.world .land path.hl.on{fill:var(--blue)}
+.world .arc{fill:none;stroke:var(--blue);stroke-width:1.6;stroke-linecap:round;opacity:.5;stroke-dasharray:1;stroke-dashoffset:1;animation:arc-draw 1.1s cubic-bezier(.45,0,.2,1) forwards;transition:opacity .25s,stroke-width .25s}
+@keyframes arc-draw{to{stroke-dashoffset:0}}
+.world .flow{fill:var(--blue);stroke:#fff;stroke-width:1.4;pointer-events:none}
+.world .arc.on{opacity:1;stroke-width:2.6}
+.map-focus .world .arc:not(.on){opacity:.18}
+.world .pin{cursor:pointer;outline:none}
+.world .pin circle.hit{fill:transparent;stroke:none}
+.world .pin circle:not(.hit){fill:#fff;stroke:var(--blue);stroke-width:3;transition:r .2s}
+.world .pin.home circle:not(.hit){fill:var(--blue);stroke:#fff}
+.world .pin text{font:700 13px/1 'DM Sans',Arial,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--pale);stroke-width:4px;stroke-linejoin:round}
+.world .pin.on circle:not(.hit),.world .pin:focus-visible circle:not(.hit){fill:var(--blue);stroke:#fff}
+.world .pin.on text{fill:var(--blue)}
+.map-note{margin:12px 0 0;font-size:.875rem;color:var(--muted)}
+
+.collab-group{padding-bottom:56px}
+.logo-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px}
+.logo-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 16px 18px;border:1px solid var(--line);border-radius:16px;background:#fff;text-align:center;transition:border-color .2s,transform .2s,box-shadow .2s;min-width:0}
+.logo-card.on,.logo-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 10px 22px #124f8314}
+.logo-box{display:grid;place-items:center;width:100%;height:84px}
+.logo-box img{max-width:100%;max-height:84px;width:auto;height:auto;object-fit:contain}
+.wordmark{font:700 1.0625rem/1.25 Manrope,Arial,sans-serif;letter-spacing:-.02em;color:#5a7488;text-wrap:balance}
+.logo-region{font-size:.9375rem;font-weight:600;color:var(--blue)}
+@media(max-width:640px){
+  .world{border-radius:14px;padding:8px 4px}
+  .world .pin text{font-size:20px;stroke-width:5px}
+  .logo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .logo-box{height:64px}.logo-box img{max-height:64px}
+}
+@media(prefers-reduced-motion:reduce){.world .arc{animation:none;stroke-dashoffset:0}.world .flow{display:none}}
+
+/* Region info card: floats beside the pin on desktop, sits under the map on phones */
+.map-wrap{position:relative}
+.map-pop{position:absolute;z-index:5;width:max-content;max-width:min(400px,calc(100% - 16px));background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 36px #12395629;padding:14px 16px 16px;animation:pop-in .18s ease-out}
+@keyframes pop-in{from{opacity:0;transform:translateY(4px)}}
+.pop-title{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 12px;font:700 1.0625rem/1.3 Manrope,Arial,sans-serif;letter-spacing:-.02em;color:var(--ink)}
+.pop-title span{font:600 .75rem/1 'DM Sans',Arial,sans-serif;letter-spacing:.04em;color:var(--blue);white-space:nowrap}
+.pop-logos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--cols),76px);gap:12px}
+.pop-logos li{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;min-width:0}
+.pop-logo{display:grid;place-items:center;width:76px;height:44px;padding:5px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.pop-logo{box-sizing:border-box;overflow:hidden}
+.pop-logo img{display:block;max-width:100%;max-height:32px;width:auto;height:auto;min-width:0;object-fit:contain}
+.pop-name{font-size:.6875rem;line-height:1.3;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:640px){
+  .map-pop{position:static;width:auto;max-width:none;margin-top:12px;box-shadow:none}
+  .pop-logos{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pop-logo{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.map-pop{animation:none}}
