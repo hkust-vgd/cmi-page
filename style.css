@@ -215,9 +215,13 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 
 
 /* Evenly distribute top-level navigation items on wide screens, with or without a toggle. */
-@media(min-width:1250px){
+@media(min-width:1200px){
  nav{gap:20px}
  nav>*{flex:1 1 auto;display:flex;align-items:center;justify-content:center;white-space:nowrap}
- nav .research-toggle,nav .about-toggle{flex-shrink:0}
- .nav-research,.nav-resources{margin-right:-30px}
+ nav .about-toggle{flex-shrink:0}
+}
+/* Resources keeps its own group wrapper, styled like the About group. */
+.nav-resources{display:flex;align-items:center;position:relative}
+@media(max-width:980px){
+ .nav-resources{flex-wrap:wrap;gap:0}
 }

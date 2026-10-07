@@ -40,6 +40,17 @@ function addAboutDropdown(navigation) {
   if (contactLink) contactLink.remove();
 }
 
+function textToggleButton(label, panelId, ariaLabel) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'about-toggle';
+  button.setAttribute('aria-expanded', 'false');
+  button.setAttribute('aria-controls', panelId);
+  button.setAttribute('aria-label', `Show ${ariaLabel}`);
+  button.innerHTML = `${label} <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  return button;
+}
+
 function addResourcesDropdown(navigation) {
   if (!navigation || navigation.querySelector('.nav-resources')) return;
   const directLinks = Array.from(navigation.children).filter(node => node.tagName === 'A');
@@ -48,15 +59,9 @@ function addResourcesDropdown(navigation) {
   if (!resourcesLink) return;
 
   const group = document.createElement('div');
-  group.className = 'nav-research nav-resources';
-  const mainLink = resourcesLink.cloneNode(true);
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'research-toggle resources-toggle';
-  button.setAttribute('aria-expanded', 'false');
-  button.setAttribute('aria-controls', 'resources-navigation');
-  button.setAttribute('aria-label', 'Show resource sections');
-  button.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  group.className = 'nav-resources';
+  const button = textToggleButton('Resources', 'resources-navigation', 'resource sections');
+  if (resourcesLink.hasAttribute('aria-current')) button.classList.add('section-active');
 
   const panel = document.createElement('div');
   panel.className = 'research-dropdown resources-dropdown';
@@ -75,16 +80,33 @@ function addResourcesDropdown(navigation) {
   facilitiesLink.setAttribute('href', 'resources.html#facilities');
   facilitiesLink.textContent = 'Facilities';
   panel.append(overviewLink, datasetsLink, toolsLink, facilitiesLink);
-  group.append(mainLink, button, panel);
+  group.append(button, panel);
   resourcesLink.replaceWith(group);
+}
+
+// Convert the icon-only chevron next to Research into a single text toggle like About.
+function useTextToggle(group, label) {
+  if (!group || group.dataset.textToggle) return;
+  const link = group.querySelector(':scope > a');
+  const icon = group.querySelector(':scope > button');
+  const panel = group.querySelector(':scope > div');
+  if (!link || !icon || !panel) return;
+  const button = textToggleButton(label, panel.id, label);
+  if (link.hasAttribute('aria-current') || link.classList.contains('section-active')) {
+    button.classList.add('section-active');
+  }
+  group.dataset.textToggle = 'true';
+  link.remove();
+  icon.replaceWith(button);
 }
 
 addAboutDropdown(nav);
 addResourcesDropdown(nav);
+document.querySelectorAll('.nav-research').forEach(group => useTextToggle(group, 'research directions'));
 const disclosures = [
-  { group: '.nav-about', button: '.about-toggle', panel: '#about-navigation', label: 'About menu' },
-  { group: '.nav-research', button: '.research-toggle', panel: '#research-navigation', label: 'research directions' },
-  { group: '.nav-resources', button: '.resources-toggle', panel: '#resources-navigation', label: 'resource sections' },
+  { group: '.nav-about', button: '.nav-about > .about-toggle', panel: '#about-navigation', label: 'About menu' },
+  { group: '.nav-research', button: '.nav-research > .about-toggle', panel: '#research-navigation', label: 'research directions' },
+  { group: '.nav-resources', button: '.nav-resources > .about-toggle', panel: '#resources-navigation', label: 'resource sections' },
 ].map(config => ({
   ...config,
   group: document.querySelector(config.group),
