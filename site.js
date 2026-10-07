@@ -66,14 +66,18 @@ function addResourcesDropdown(navigation) {
   overviewLink.setAttribute('href', 'resources.html');
   overviewLink.textContent = 'Resources overview';
   const datasetsLink = document.createElement('a');
-  datasetsLink.setAttribute('href', 'resources.html#datasets');
+  datasetsLink.setAttribute('href', 'resources-datasets.html');
   datasetsLink.textContent = 'Datasets';
   const toolsLink = document.createElement('a');
-  toolsLink.setAttribute('href', 'resources.html#tools');
+  toolsLink.setAttribute('href', 'resources-tools.html');
   toolsLink.textContent = 'Tools';
   const facilitiesLink = document.createElement('a');
-  facilitiesLink.setAttribute('href', 'resources.html#facilities');
+  facilitiesLink.setAttribute('href', 'resources-facilities.html');
   facilitiesLink.textContent = 'Facilities';
+  const currentPage = window.location.pathname.split('/').pop();
+  [datasetsLink, toolsLink, facilitiesLink].forEach(link => {
+    if (link.getAttribute('href') === currentPage) link.setAttribute('aria-current', 'page');
+  });
   panel.append(overviewLink, datasetsLink, toolsLink, facilitiesLink);
   group.append(mainLink, button, panel);
   resourcesLink.replaceWith(group);
