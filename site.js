@@ -89,13 +89,13 @@ function addResourcesDropdown(navigation) {
 }
 
 // Convert the icon-only chevron next to Research into a single text toggle like About.
-function useTextToggle(group, label) {
+function useTextToggle(group, label, ariaLabel) {
   if (!group || group.dataset.textToggle) return;
   const link = group.querySelector(':scope > a');
   const icon = group.querySelector(':scope > button');
   const panel = group.querySelector(':scope > div');
   if (!link || !icon || !panel) return;
-  const button = textToggleButton(label, panel.id, label);
+  const button = textToggleButton(label, panel.id, ariaLabel);
   if (link.hasAttribute('aria-current') || link.classList.contains('section-active')) {
     button.classList.add('section-active');
   }
@@ -106,7 +106,7 @@ function useTextToggle(group, label) {
 
 addAboutDropdown(nav);
 addResourcesDropdown(nav);
-document.querySelectorAll('.nav-research').forEach(group => useTextToggle(group, 'research directions'));
+document.querySelectorAll('.nav-research').forEach(group => useTextToggle(group, 'Research', 'research directions'));
 const disclosures = [
   { group: '.nav-about', button: '.nav-about > .about-toggle', panel: '#about-navigation', label: 'About menu' },
   { group: '.nav-research', button: '.nav-research > .about-toggle', panel: '#research-navigation', label: 'research directions' },
