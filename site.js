@@ -40,10 +40,51 @@ function addAboutDropdown(navigation) {
   if (contactLink) contactLink.remove();
 }
 
+function addResourcesDropdown(navigation) {
+  if (!navigation || navigation.querySelector('.nav-resources')) return;
+  const directLinks = Array.from(navigation.children).filter(node => node.tagName === 'A');
+  const pointsTo = (link, name) => (link.getAttribute('href') || '').split(/[?#]/)[0].split('/').pop() === name;
+  const resourcesLink = directLinks.find(link => pointsTo(link, 'resources.html'));
+  if (!resourcesLink) return;
+
+  const group = document.createElement('div');
+  group.className = 'nav-research nav-resources';
+  const mainLink = resourcesLink.cloneNode(true);
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'research-toggle resources-toggle';
+  button.setAttribute('aria-expanded', 'false');
+  button.setAttribute('aria-controls', 'resources-navigation');
+  button.setAttribute('aria-label', 'Show resource sections');
+  button.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  const panel = document.createElement('div');
+  panel.className = 'research-dropdown resources-dropdown';
+  panel.id = 'resources-navigation';
+  panel.hidden = true;
+  const overviewLink = resourcesLink.cloneNode(true);
+  overviewLink.setAttribute('href', 'resources.html');
+  overviewLink.textContent = 'Resources overview';
+  const datasetsLink = document.createElement('a');
+  datasetsLink.setAttribute('href', 'resources.html#datasets');
+  datasetsLink.textContent = 'Datasets';
+  const toolsLink = document.createElement('a');
+  toolsLink.setAttribute('href', 'resources.html#tools');
+  toolsLink.textContent = 'Tools';
+  const facilitiesLink = document.createElement('a');
+  facilitiesLink.setAttribute('href', 'resources.html#facilities');
+  facilitiesLink.textContent = 'Facilities';
+  panel.append(overviewLink, datasetsLink, toolsLink, facilitiesLink);
+  group.append(mainLink, button, panel);
+  resourcesLink.replaceWith(group);
+}
+
 addAboutDropdown(nav);
+addResourcesDropdown(nav);
 const disclosures = [
   { group: '.nav-about', button: '.about-toggle', panel: '#about-navigation', label: 'About menu' },
   { group: '.nav-research', button: '.research-toggle', panel: '#research-navigation', label: 'research directions' },
+  { group: '.nav-resources', button: '.resources-toggle', panel: '#resources-navigation', label: 'resource sections' },
 ].map(config => ({
   ...config,
   group: document.querySelector(config.group),
