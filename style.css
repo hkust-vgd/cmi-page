@@ -217,6 +217,6 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 /* Evenly distribute top-level navigation items on wide screens, with or without a toggle. */
 @media(min-width:1200px){
  nav{gap:0}
- nav>*{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;white-space:nowrap}
- nav>.research-toggle,nav .research-toggle,nav .about-toggle{flex-shrink:0}
+ nav>*{flex:1 1 auto;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+ nav .research-toggle,nav .about-toggle{flex-shrink:0}
 }
