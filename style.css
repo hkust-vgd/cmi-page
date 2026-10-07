@@ -221,3 +221,6 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
  nav .research-toggle,nav .about-toggle{flex-shrink:0}
  .nav-research,.nav-resources{margin-right:-30px}
 }
+
+/* Resources sits near the right edge: open its dropdown towards the left so it stays on screen. */
+@media(min-width:981px){.resources-dropdown{left:auto;right:-20px}}

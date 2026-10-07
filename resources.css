@@ -140,3 +140,14 @@
   .pop-logo{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.map-pop{animation:none}}
+
+/* Resources overview + sub-pages */
+.resource-jumps.two{grid-template-columns:repeat(2,minmax(0,1fr));max-width:620px}
+.resource-page{padding-bottom:40px}
+.resource-page>.resource-group:first-of-type,.resource-page>.resource-jumps+.resource-group{margin-top:8px}
+.facility-visual{flex-direction:column;gap:6px;background:var(--pale);border-radius:10px;text-align:center}
+.facility-visual b{font:700 1.5rem/1.2 Manrope,Arial,sans-serif;letter-spacing:-.03em;color:var(--ink)}
+.facility-visual span{font-size:.875rem;font-weight:600;color:var(--blue);letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:700px){.resource-jumps.two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.logo-name abbr{text-decoration:none;cursor:help}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
