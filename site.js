@@ -403,6 +403,7 @@ if (principles) {
     });
   });
   track.addEventListener('click', (event) => {
+    if (event.target.closest('a, button, .edu-feature')) return;
     const article = event.target.closest('article');
     const itemIndex = slides.indexOf(article);
     if (itemIndex < 0) return;
