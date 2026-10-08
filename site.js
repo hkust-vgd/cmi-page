@@ -142,14 +142,9 @@ if (toggle && nav) {
 }
 
 const navHashTarget = disclosures.find(item => `#${item.hash}` === window.location.hash);
-if (navHashTarget) {
-  setDisclosureOpen(navHashTarget, true);
-  if (window.matchMedia('(max-width: 980px)').matches) setMenuOpen(true);
-  history.replaceState(null, '', window.location.pathname + window.location.search);
-}
 
 disclosures.forEach(item => {
-  setDisclosureOpen(item, false);
+  setDisclosureOpen(item, navHashTarget === item);
   item.button.addEventListener('click', () => {
     const current = window.location.pathname.split('/').pop() || 'index.html';
     if (current !== item.page) {
@@ -177,6 +172,11 @@ disclosures.forEach(item => {
     if (nav && nav.classList.contains('open')) setMenuOpen(false);
   });
 });
+
+if (navHashTarget) {
+  if (window.matchMedia('(max-width: 980px)').matches) setMenuOpen(true);
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+}
 
 document.addEventListener('click', event => {
   disclosures.forEach(item => {
