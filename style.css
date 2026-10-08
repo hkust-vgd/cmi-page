@@ -355,3 +355,10 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 .link-secondary{display:table;margin-top:14px;font-size:.9375rem;font-weight:700;padding-bottom:5px;border-bottom:2px solid #8abfe4;color:inherit}
 .link-secondary:hover{color:var(--blue);border-color:var(--blue);text-decoration:none}
 .living .text-link,.coastal-content .text-link{display:table}
+
+.contact-director{display:flex;align-items:center;justify-content:space-between;gap:20px 28px;flex-wrap:wrap}
+.contact-director p{margin:0}
+.contact-enquiries{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.contact-enquiries h3{font-size:1.25rem;letter-spacing:-.025em;margin:0 0 8px}
+.contact-enquiries p{font-size:.9375rem;color:var(--muted);margin:0 0 16px}
+.contact-enquiries .button{width:100%}
