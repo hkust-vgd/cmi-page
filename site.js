@@ -32,7 +32,7 @@ function addAboutDropdown(navigation) {
   missionLink.setAttribute('href', 'about.html#mission-vision');
   missionLink.textContent = 'Mission & Vision';
   const contactItem = contactLink ? contactLink.cloneNode(true) : document.createElement('a');
-  contactItem.setAttribute('href', 'contact.html');
+  contactItem.setAttribute('href', 'about.html#contact');
   contactItem.textContent = 'Contact';
   panel.append(missionLink, contactItem);
   group.append(button, panel);
