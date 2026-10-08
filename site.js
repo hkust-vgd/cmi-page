@@ -105,9 +105,9 @@ addAboutDropdown(nav);
 addResourcesDropdown(nav);
 document.querySelectorAll('.nav-research').forEach(group => useTextToggle(group, 'Research', 'research directions'));
 const disclosures = [
-  { group: '.nav-about', button: '.nav-about > .about-toggle', panel: '#about-navigation', label: 'About menu', page: 'about.html' },
-  { group: '.nav-research', button: '.nav-research > .about-toggle', panel: '#research-navigation', label: 'research directions', page: 'research.html' },
-  { group: '.nav-resources', button: '.nav-resources > .about-toggle', panel: '#resources-navigation', label: 'resource sections', page: 'resources.html' },
+  { group: '.nav-about', button: '.nav-about > .about-toggle', panel: '#about-navigation', label: 'About menu', page: 'about.html', hash: 'nav-about' },
+  { group: '.nav-research', button: '.nav-research > .about-toggle', panel: '#research-navigation', label: 'research directions', page: 'research.html', hash: 'nav-research' },
+  { group: '.nav-resources', button: '.nav-resources > .about-toggle', panel: '#resources-navigation', label: 'resource sections', page: 'resources.html', hash: 'nav-resources' },
 ].map(config => ({
   ...config,
   group: document.querySelector(config.group),
@@ -141,26 +141,23 @@ if (toggle && nav) {
   });
 }
 
-let openNavPanel = '';
-try {
-  openNavPanel = sessionStorage.getItem('cmi-open-nav') || '';
-  sessionStorage.removeItem('cmi-open-nav');
-} catch (error) {}
+const navHashTarget = disclosures.find(item => `#${item.hash}` === window.location.hash);
+if (navHashTarget) {
+  setDisclosureOpen(navHashTarget, true);
+  if (window.matchMedia('(max-width: 980px)').matches) setMenuOpen(true);
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+}
 
 disclosures.forEach(item => {
-  setDisclosureOpen(item, openNavPanel === item.panel);
+  setDisclosureOpen(item, false);
   item.button.addEventListener('click', () => {
-    if (window.matchMedia('(max-width: 980px)').matches) {
-      setDisclosureOpen(item, item.button.getAttribute('aria-expanded') !== 'true');
-      return;
-    }
     const current = window.location.pathname.split('/').pop() || 'index.html';
     if (current !== item.page) {
-      try { sessionStorage.setItem('cmi-open-nav', item.panel); } catch (error) {}
-      window.location.href = item.page;
+      window.location.href = `${item.page}#${item.hash}`;
       return;
     }
     setDisclosureOpen(item, true);
+    if (window.matchMedia('(max-width: 980px)').matches) setMenuOpen(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   item.button.addEventListener('keydown', event => {
