@@ -424,11 +424,6 @@ if (principles) {
   principles.addEventListener('wheel', (event) => {
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
     const direction = event.deltaY > 0 ? 1 : -1;
-    const atBoundary = (index === 0 && direction < 0) || (index === cards.length - 1 && direction > 0);
-    if (atBoundary) {
-      wheelAccum = 0;
-      return;
-    }
     event.preventDefault();
     if (wheelCooldown) return;
     wheelAccum += event.deltaY;
