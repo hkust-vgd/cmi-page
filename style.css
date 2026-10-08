@@ -352,5 +352,6 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 }
 
 
-.link-secondary{display:inline-block;font-size:.8125rem;font-weight:600;color:var(--muted);margin-top:14px}
-.link-secondary:hover{color:var(--blue);text-decoration:underline}
+.link-secondary{display:table;margin-top:14px;font-size:.9375rem;font-weight:700;padding-bottom:5px;border-bottom:2px solid #8abfe4;color:inherit}
+.link-secondary:hover{color:var(--blue);border-color:var(--blue);text-decoration:none}
+.living .text-link,.coastal-content .text-link{display:table}
