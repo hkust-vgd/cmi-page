@@ -67,9 +67,6 @@ function addResourcesDropdown(navigation) {
   panel.className = 'research-dropdown resources-dropdown';
   panel.id = 'resources-navigation';
   panel.hidden = true;
-  const overviewLink = resourcesLink.cloneNode(true);
-  overviewLink.setAttribute('href', 'resources.html');
-  overviewLink.textContent = 'Resources overview';
   const datasetsLink = document.createElement('a');
   datasetsLink.setAttribute('href', 'resources-datasets.html');
   datasetsLink.textContent = 'Datasets';
@@ -83,7 +80,7 @@ function addResourcesDropdown(navigation) {
   [datasetsLink, toolsLink, facilitiesLink].forEach(link => {
     if (link.getAttribute('href') === currentPage) link.setAttribute('aria-current', 'page');
   });
-  panel.append(overviewLink, datasetsLink, toolsLink, facilitiesLink);
+  panel.append(datasetsLink, toolsLink, facilitiesLink);
   group.append(button, panel);
   resourcesLink.replaceWith(group);
 }
@@ -108,9 +105,9 @@ addAboutDropdown(nav);
 addResourcesDropdown(nav);
 document.querySelectorAll('.nav-research').forEach(group => useTextToggle(group, 'Research', 'research directions'));
 const disclosures = [
-  { group: '.nav-about', button: '.nav-about > .about-toggle', panel: '#about-navigation', label: 'About menu' },
-  { group: '.nav-research', button: '.nav-research > .about-toggle', panel: '#research-navigation', label: 'research directions' },
-  { group: '.nav-resources', button: '.nav-resources > .about-toggle', panel: '#resources-navigation', label: 'resource sections' },
+  { group: '.nav-about', button: '.nav-about > .about-toggle', panel: '#about-navigation', label: 'About menu', page: 'about.html' },
+  { group: '.nav-research', button: '.nav-research > .about-toggle', panel: '#research-navigation', label: 'research directions', page: 'research.html' },
+  { group: '.nav-resources', button: '.nav-resources > .about-toggle', panel: '#resources-navigation', label: 'resource sections', page: 'resources.html' },
 ].map(config => ({
   ...config,
   group: document.querySelector(config.group),
@@ -144,10 +141,27 @@ if (toggle && nav) {
   });
 }
 
+let openNavPanel = '';
+try {
+  openNavPanel = sessionStorage.getItem('cmi-open-nav') || '';
+  sessionStorage.removeItem('cmi-open-nav');
+} catch (error) {}
+
 disclosures.forEach(item => {
-  setDisclosureOpen(item, false);
+  setDisclosureOpen(item, openNavPanel === item.panel);
   item.button.addEventListener('click', () => {
-    setDisclosureOpen(item, item.button.getAttribute('aria-expanded') !== 'true');
+    if (window.matchMedia('(max-width: 980px)').matches) {
+      setDisclosureOpen(item, item.button.getAttribute('aria-expanded') !== 'true');
+      return;
+    }
+    const current = window.location.pathname.split('/').pop() || 'index.html';
+    if (current !== item.page) {
+      try { sessionStorage.setItem('cmi-open-nav', item.panel); } catch (error) {}
+      window.location.href = item.page;
+      return;
+    }
+    setDisclosureOpen(item, true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   item.button.addEventListener('keydown', event => {
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;

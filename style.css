@@ -118,7 +118,6 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 .research-dropdown{position:absolute;top:calc(100% + 12px);left:-20px;width:360px;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 35px #1239561c}
 .research-dropdown[hidden]{display:none}
 .research-dropdown a{display:block;padding:12px 14px;border-radius:6px;font-size:.875rem;line-height:1.5}
-.research-dropdown a:first-child{font-weight:700;border-bottom:1px solid var(--line);border-radius:0;margin-bottom:5px;padding-bottom:14px}
 .research-dropdown a:hover,.research-dropdown a[aria-current]{background:var(--pale)}
 .research-dropdown a[aria-current]:after{display:none}
 
