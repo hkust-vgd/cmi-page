@@ -419,6 +419,26 @@ if (principles) {
   principles.addEventListener('pointercancel', () => { pressing = false; });
   principles.addEventListener('focusin', () => { hovering = true; });
   principles.addEventListener('focusout', () => { hovering = false; });
+  let wheelCooldown = false;
+  let wheelAccum = 0;
+  principles.addEventListener('wheel', (event) => {
+    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    const direction = event.deltaY > 0 ? 1 : -1;
+    const atBoundary = (index === 0 && direction < 0) || (index === cards.length - 1 && direction > 0);
+    if (atBoundary) {
+      wheelAccum = 0;
+      return;
+    }
+    event.preventDefault();
+    if (wheelCooldown) return;
+    wheelAccum += event.deltaY;
+    if (Math.abs(wheelAccum) < 48) return;
+    wheelAccum = 0;
+    wheelCooldown = true;
+    window.setTimeout(() => { wheelCooldown = false; }, 450);
+    goTo(index + direction, 'smooth');
+    start();
+  }, { passive: false });
   reduceMotion.addEventListener('change', start);
   let lastWidth = 0;
   let resizeTimer = 0;
