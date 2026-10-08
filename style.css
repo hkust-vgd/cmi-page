@@ -219,7 +219,8 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
  nav{gap:20px}
  nav>*{flex:1 1 auto;display:flex;align-items:center;justify-content:center;white-space:nowrap}
  nav .about-toggle{flex-shrink:0}
- .nav-research,.nav-resources{margin-left:20px}
+ .nav-research,.nav-resources{margin-left:5px}
+ .research-dropdown,.about-dropdown{white-space:normal}
 }
 /* Resources keeps its own group wrapper, styled like the About group. */
 .nav-resources{display:flex;align-items:center;position:relative}
