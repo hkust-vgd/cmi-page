@@ -351,3 +351,6 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
   .edu-lightbox{width:calc(100vw - 16px);padding:12px}
 }
 
+
+.link-secondary{display:inline-block;font-size:.8125rem;font-weight:600;color:var(--muted);margin-top:14px}
+.link-secondary:hover{color:var(--blue);text-decoration:underline}
