@@ -389,6 +389,6 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 .contact-location>img.contact-location-bg{position:absolute;inset:0;z-index:0}
 .contact-location h2{color:#fff;text-shadow:0 1px 8px rgba(6,48,84,.4)}
 .contact-location .eyebrow{color:#dff0fc}
-.contact-location p{color:#fff;text-shadow:0 1px 6px rgba(6,48,84,.45)}
+.contact-grid .contact-location p{color:#fff;text-shadow:0 1px 6px rgba(6,48,84,.45)}
 .contact-location .text-link{color:#fff;border-color:#ffffff99;text-shadow:0 1px 6px rgba(6,48,84,.45)}
 .contact-location .text-link:hover{color:var(--sky);border-color:var(--sky)}
