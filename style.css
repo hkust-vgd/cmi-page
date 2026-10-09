@@ -382,4 +382,12 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 .contact-enquiries p{font-size:.9375rem;color:var(--muted);margin:0 0 16px}
 .contact-enquiries .button{width:100%;background:#fff;color:var(--blue);border-color:var(--line)}
 
-.contact-location-img{display:block;width:100%;height:auto;border-radius:12px;margin:6px 0 18px}
+.contact-location{position:relative;overflow:hidden;color:#fff}
+.contact-location-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.contact-location::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,48,84,.82) 0%,rgba(9,106,175,.55) 55%,rgba(6,48,84,.78) 100%);z-index:1}
+.contact-location>*{position:relative;z-index:2}
+.contact-location h2{color:#fff}
+.contact-location .eyebrow{color:#bfe2f8}
+.contact-location p{color:#eaf5fd}
+.contact-location .text-link{color:#fff;border-color:#ffffff99}
+.contact-location .text-link:hover{color:var(--sky);border-color:var(--sky)}
