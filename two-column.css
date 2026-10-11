@@ -1,0 +1,50 @@
+/* Companion layout: original single-column page keeps its own styles. */
+.layout-preview { display: flex; align-items: center; flex-wrap: wrap; gap: 13px; margin-top: 26px; font-size: .8125rem; }
+.layout-preview > span { color: var(--muted); }
+.layout-options { display: inline-flex; padding: 4px; gap: 3px; border: 1px solid #d9e7f2; border-radius: 9px; background: #f5f9fc; }
+.layout-options a { display: inline-flex; align-items: center; padding: 7px 13px; color: var(--muted); border-radius: 6px; line-height: 1.4; }
+.layout-options a[aria-current="page"] { color: var(--blue); background: #fff; box-shadow: 0 1px 4px #12395614; font-weight: 650; }
+.layout-options a:hover { color: var(--blue); background: #eaf3fa; }
+.layout-options a:focus-visible, .page-advisory-two .adviser-profile:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+.page-advisory-two .advisory-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.page-advisory-two .adviser-card { grid-template-columns: 124px minmax(0, 1fr); align-items: start; gap: 22px; padding: 26px; border-radius: 18px; }
+.page-advisory-two .adviser-portrait { width: 124px; height: 156px; align-self: start; border-radius: 10px; }
+.page-advisory-two .adviser-content { display: flex; flex-direction: column; align-self: stretch; min-width: 0; }
+.page-advisory-two .adviser-heading { display: block; margin: 0 0 9px; }
+.page-advisory-two .adviser-heading :is(h2, h3) { font-size: 1.5rem; line-height: 1.2; letter-spacing: -.03em; }
+.page-advisory-two .adviser-role { font-size: .84375rem; line-height: 1.55; margin: 0 0 14px; }
+.page-advisory-two .adviser-role span { font-size: .8125rem; margin-top: 3px; }
+.page-advisory-two .adviser-bio { margin: 0 0 16px; font-size: .9375rem; line-height: 1.7; }
+.page-advisory-two .adviser-topics { gap: 6px; margin-top: auto; }
+.page-advisory-two .adviser-topics li { padding: 4px 8px; font-size: .6875rem; line-height: 1.45; }
+.page-advisory-two .adviser-profile { align-self: flex-start; gap: 7px; font-size: .8125rem; margin-top: 14px; }
+@media (min-width: 1081px) and (max-width: 1199px) {
+  .page-advisory-two .adviser-card { grid-template-columns: 110px minmax(0, 1fr); gap: 18px; padding: 23px; }
+  .page-advisory-two .adviser-portrait { width: 110px; height: 144px; }
+  .page-advisory-two .adviser-heading :is(h2, h3) { font-size: 1.4rem; }
+}
+@media (max-width: 1080px) {
+  .page-advisory-two .advisory-list { grid-template-columns: minmax(0, 1fr); }
+  .page-advisory-two .adviser-card { grid-template-columns: 150px minmax(0, 1fr); gap: 28px; }
+  .page-advisory-two .adviser-portrait { width: 150px; height: 184px; }
+  .page-advisory-two .adviser-heading :is(h2, h3) { font-size: 1.65rem; }
+}
+@media (max-width: 640px) {
+  .layout-preview { margin-top: 22px; }
+  .page-advisory-two .advisory-list { gap: 20px; }
+  .page-advisory-two .adviser-card { grid-template-columns: 108px minmax(0, 1fr); gap: 12px 18px; padding: 22px; border-radius: 16px; }
+  .page-advisory-two .adviser-portrait { width: 108px; height: 138px; grid-column: 1; grid-row: 1 / 3; border-radius: 9px; }
+  .page-advisory-two .adviser-content { display: contents; }
+  .page-advisory-two .adviser-heading { grid-column: 2; grid-row: 1; margin: 0; }
+  .page-advisory-two .adviser-heading :is(h2, h3) { font-size: 1.4rem; }
+  .page-advisory-two .adviser-role { grid-column: 2; grid-row: 2; font-size: .8125rem; margin: 0; }
+  .page-advisory-two .adviser-role span { font-size: .78125rem; }
+  .page-advisory-two .adviser-bio { grid-column: 1 / -1; grid-row: 3; margin: 6px 0 3px; }
+  .page-advisory-two .adviser-topics { grid-column: 1 / -1; grid-row: 4; margin: 0; }
+  .page-advisory-two .adviser-profile { grid-column: 1 / -1; grid-row: 5; justify-self: start; margin-top: 2px; }
+}
+@media (max-width: 390px) {
+  .page-advisory-two .adviser-card { grid-template-columns: 90px minmax(0, 1fr); padding: 19px; gap: 12px 14px; }
+  .page-advisory-two .adviser-portrait { width: 90px; height: 116px; }
+  .page-advisory-two .adviser-heading :is(h2, h3) { font-size: 1.25rem; }
+}
