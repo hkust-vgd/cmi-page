@@ -17,7 +17,8 @@
 .page-advisory-two .adviser-bio { margin: 0 0 16px; font-size: .9375rem; line-height: 1.7; }
 .page-advisory-two .adviser-topics { gap: 6px; margin-top: auto; }
 .page-advisory-two .adviser-topics li { padding: 4px 8px; font-size: .6875rem; line-height: 1.45; }
-.page-advisory-two .adviser-profile { align-self: flex-start; gap: 7px; font-size: .8125rem; margin-top: 14px; }
+.page-advisory-two .adviser-profile { align-self: flex-start; margin-top: 14px; font-size: .875rem; font-weight: 600; color: var(--ink); border-bottom: 1px solid #8abfe4; padding-bottom: 2px; }
+.page-advisory-two .adviser-profile:hover { color: var(--blue); text-decoration: none; border-color: var(--blue); }
 @media (min-width: 1081px) and (max-width: 1199px) {
   .page-advisory-two .adviser-card { grid-template-columns: 110px minmax(0, 1fr); gap: 18px; padding: 23px; }
   .page-advisory-two .adviser-portrait { width: 110px; height: 144px; }

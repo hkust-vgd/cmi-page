@@ -1,9 +1,9 @@
 /* Keep the existing People page's intro, portraits and faculty grid.
    These shared additions provide only the in-page tabs and advisory spacing. */
 .page-community { background: #fff; }
-.page-community .people-sections { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; flex-wrap: wrap; width: 100%; max-height: none; overflow: visible; gap: 30px; margin: 0 0 34px; padding: 0; border-bottom: 1px solid var(--line); }
-.page-community .people-sections > a { flex: 0 0 auto; display: inline-flex; justify-content: flex-start; padding: 15px 0; font-size: .9375rem; }
-.page-community .people-sections > a[aria-current]::after { width: auto; right: 0; bottom: -1px; }
+.people-sections { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; flex-wrap: wrap; width: 100%; max-height: none; overflow: visible; gap: 30px; margin: 0 0 34px; padding: 0; border-bottom: 1px solid var(--line); }
+.people-sections > a { flex: 0 0 auto; display: inline-flex; justify-content: flex-start; padding: 15px 0; font-size: .9375rem; }
+.people-sections > a[aria-current]::after { width: auto; right: 0; bottom: -1px; }
 .people-sections a:focus-visible { outline: 2px solid var(--blue); outline-offset: 5px; }
 .community-section { margin-bottom: 52px; }
 .community-section-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 16px 32px; margin-bottom: 25px; }
@@ -24,13 +24,13 @@
   .community-section-heading { align-items: flex-start; flex-wrap: wrap; }
 }
 @media (max-width: 640px) {
-  .page-community .people-sections { gap: 24px; margin-bottom: 28px; }
-  .page-community .people-sections > a { font-size: .875rem; padding: 14px 0; }
+  .people-sections { gap: 24px; margin-bottom: 28px; }
+  .people-sections > a { font-size: .875rem; padding: 14px 0; }
   .community-section-heading { margin-bottom: 20px; }
   .community-section-heading h2 { font-size: 1.55rem; }
   .community-section-heading p { font-size: .875rem; }
   .community-footnote { padding-bottom: 40px; }
 }
 @media (max-width: 390px) {
-  .page-community .people-sections { gap: 20px; }
+  .people-sections { gap: 20px; }
 }
