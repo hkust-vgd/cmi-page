@@ -1,0 +1,160 @@
+/* Direction 01 works list; shared navigation and other pages stay intact. */
+.page-research-observation .observation-works {
+  padding-bottom: 72px;
+}
+.page-research-observation .works-intro {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 64px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+.page-research-observation .works-intro .eyebrow {
+  margin-bottom: 14px;
+}
+.page-research-observation .works-intro h2 {
+  font-size: clamp(1.85rem, 3vw, 2.65rem);
+  line-height: 1.2;
+  margin-bottom: 0;
+}
+.page-research-observation .works-intro p {
+  font-size: 1.0625rem;
+  color: var(--muted);
+  margin: 0;
+}
+.page-research-observation .works-intro p a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.page-research-observation .works-group {
+  margin-top: 48px;
+}
+.page-research-observation .works-group-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  border-top: 3px solid var(--accent);
+  padding-top: 22px;
+}
+.page-research-observation .works-group-heading span {
+  color: var(--blue);
+  font-size: .875rem;
+  font-weight: 600;
+}
+.page-research-observation .works-group-heading h3 {
+  font-size: clamp(1.45rem, 2.3vw, 1.85rem);
+  line-height: 1.25;
+  margin: 0;
+}
+.page-research-observation .works-group-heading small {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: .875rem;
+}
+.page-research-observation .work {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: 44px;
+  align-items: stretch;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+}
+.page-research-observation .work-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  cursor: zoom-in;
+}
+.page-research-observation .work-figure:focus-visible {
+  outline-offset: 3px;
+}
+.page-research-observation .work-figure img {
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: contain;
+}
+.page-research-observation .work-body {
+  align-self: center;
+}
+.page-research-observation .work-venue {
+  margin: 0 0 10px;
+  color: var(--blue);
+  font-size: .875rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.page-research-observation .work h4 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+}
+.page-research-observation .work-title {
+  margin: 6px 0 14px;
+  color: var(--ink);
+  font-size: .9375rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+.page-research-observation .work-body > p:not(.work-venue):not(.work-title) {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+.page-research-observation .work-body > h4 + p:not(.work-venue):not(.work-title) {
+  margin-top: 14px;
+}
+@media (max-width: 1100px) {
+  .page-research-observation .works-intro {
+    gap: 36px;
+  }
+  .page-research-observation .work {
+    gap: 32px;
+  }
+}
+@media (max-width: 860px) {
+  .page-research-observation .works-intro {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .page-research-observation .work {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .page-research-observation .work-figure {
+    min-height: 0;
+  }
+}
+@media (max-width: 640px) {
+  .page-research-observation .observation-works {
+    padding-bottom: 48px;
+  }
+  .page-research-observation .works-group {
+    margin-top: 36px;
+  }
+  .page-research-observation .works-group-heading small {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+  .page-research-observation .work {
+    padding: 26px 0;
+  }
+  .page-research-observation .work-figure {
+    padding: 8px;
+    border-radius: 12px;
+  }
+  .page-research-observation .work-figure img {
+    max-height: 300px;
+  }
+  .page-research-observation .work h4 {
+    font-size: 1.3125rem;
+  }
+}
