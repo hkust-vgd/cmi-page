@@ -185,6 +185,7 @@
 .logo-hku .logo-box img,.logo-cuhk .logo-box img,.logo-polyu .logo-box img,.logo-hkbu .logo-box img,
 .logo-udayana .logo-box img,.logo-waikiki .logo-box img,.logo-crc .logo-box img,.logo-indoocean .logo-box img,
 .logo-oceanx .logo-box img,.logo-wwf .logo-box img,.logo-chula .logo-box img,.logo-deakin .logo-box img,.logo-hhyc .logo-box img{transform:scale(1.1)}
+.logo-scsio .logo-box img{transform:scale(1.15)}
 .logo-mpi-is .logo-box img,.logo-mars .logo-box img,.logo-nus .logo-box img,.logo-sutd .logo-box img,.logo-cedd .logo-box img{transform:scale(.94)}
 
 .facility-card[hidden]{display:none}
