@@ -190,3 +190,5 @@
 
 .facility-card[hidden]{display:none}
 @media(max-width:640px){.logo-mpi-is .logo-box img,.logo-cedd .logo-box img{max-width:100%}}
+.resource-slideshow img{opacity:0;transition:opacity .8s,transform .3s}
+.resource-slideshow img.is-active{opacity:1}
