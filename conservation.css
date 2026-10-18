@@ -63,3 +63,24 @@
 @media(prefers-reduced-motion:reduce) {
   .page-research-conservation .sub-map a { transition:none; }
 }
+
+/* Sixteen registered poses include the wave artwork; no clipped wave strip. */
+.page-research-conservation .seasee-heading { display:grid; grid-template-columns:minmax(0,1fr) 166px; gap:4px; align-items:center; margin-bottom:14px; }
+.page-research-conservation .seasee-heading h3 { margin-bottom:0; }
+.page-research-conservation .phoenix-scene { position:relative; width:166px; height:176px; isolation:isolate; }
+.page-research-conservation .phoenix-art { position:absolute; inset:8px 0; overflow:visible; }
+.page-research-conservation .phoenix-bob { position:absolute; inset:0; transform-origin:50% 75%; animation:phoenix-swim 3.2s ease-in-out infinite; }
+.page-research-conservation .phoenix-sprite { position:absolute; inset:0; background:url('assets/research-conservation/seaseeust-phoenix-swimming.png') 0 0 / 400% 400% no-repeat; }
+.page-research-conservation .phoenix-next { opacity:0; }
+@keyframes phoenix-swim {
+  0%,100% { transform:translateY(2px) rotate(-1.5deg); }
+  50% { transform:translateY(-3px) rotate(1.5deg); }
+}
+@media(max-width:640px) {
+  .page-research-conservation .seasee-heading { grid-template-columns:minmax(0,1fr) 126px; gap:0; }
+  .page-research-conservation .phoenix-scene { width:126px; height:142px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .page-research-conservation .phoenix-bob { animation:none; }
+  .page-research-conservation .phoenix-next { display:none; }
+}
