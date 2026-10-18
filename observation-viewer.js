@@ -65,3 +65,18 @@ if (figure && figure.dataset.splat && webgl2()) {
   }, { rootMargin: '200px' });
   observer.observe(stage);
 }
+
+// WAT3R demo: switch between the reconstruction clips.
+const demo = document.querySelector('.demo-video');
+if (demo) {
+  const video = demo.querySelector('video');
+  demo.querySelectorAll('.clip-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const clip = tab.dataset.clip;
+      demo.querySelectorAll('.clip-tab').forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
+      video.poster = `assets/research-observation/wat3r-${clip}.webp`;
+      video.src = `assets/research-observation/wat3r-${clip}.mp4`;
+      video.play().catch(() => {});
+    });
+  });
+}
