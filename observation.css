@@ -711,3 +711,56 @@
     font-size: .75rem;
   }
 }
+
+/* Dataset tiles in the observation figure: the image zooms inside its frame and key facts fade in */
+.page-research-observation .diagram .ds-img {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform .45s ease;
+}
+.page-research-observation .diagram .ds-info {
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.page-research-observation .diagram .ds-outline {
+  transition: stroke .2s;
+}
+.page-research-observation .diagram .ds-tile:hover .ds-img,
+.page-research-observation .diagram .ds-tile:focus-visible .ds-img {
+  transform: scale(1.12);
+}
+.page-research-observation .diagram .ds-tile:hover .ds-info,
+.page-research-observation .diagram .ds-tile:focus-visible .ds-info {
+  opacity: 1;
+}
+.page-research-observation .diagram .ds-tile:hover .ds-outline,
+.page-research-observation .diagram .ds-tile:focus-visible .ds-outline {
+  stroke: var(--blue);
+  stroke-width: 2;
+}
+/* Cards lift slightly and their image zooms on hover */
+.page-research-observation .card-grid a {
+  transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
+}
+.page-research-observation .card-grid a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(18, 57, 86, .12);
+}
+.page-research-observation .card-thumb img {
+  transition: transform .45s ease;
+}
+.page-research-observation .card-grid a:hover .card-thumb img {
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-research-observation .diagram .ds-img,
+  .page-research-observation .card-grid a,
+  .page-research-observation .card-thumb img {
+    transition: none;
+  }
+  .page-research-observation .diagram .ds-tile:hover .ds-img,
+  .page-research-observation .card-grid a:hover,
+  .page-research-observation .card-grid a:hover .card-thumb img {
+    transform: none;
+  }
+}
