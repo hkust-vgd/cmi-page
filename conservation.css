@@ -1,0 +1,66 @@
+/* Conservation page additions; shared navigation and other pages stay intact. */
+.page-research-conservation .conservation-introduction {
+  max-width: 940px;
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.page-research-conservation .conservation-figure-description {
+  flex: 1 1 440px;
+  min-width: 0;
+}
+.page-research-conservation .conservation-figure-description p {
+  margin: 0;
+}
+.page-research-conservation .conservation-projects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 56px;
+  row-gap: 0;
+  padding-bottom: 72px;
+}
+.page-research-conservation .conservation-projects article {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  justify-items: start;
+  border-top: 3px solid var(--accent);
+  padding-top: 26px;
+}
+.page-research-conservation .conservation-projects h3 {
+  font-size: clamp(1.45rem, 2.3vw, 1.85rem);
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.page-research-conservation .conservation-projects p {
+  color: var(--muted);
+}
+.page-research-conservation .conservation-projects .text-link {
+  margin-top: auto;
+}
+.page-research-conservation .conservation-detail .priorities p {
+  margin: 8px 0 0;
+  font-size: 1rem;
+}
+@media (max-width: 860px) {
+  .page-research-conservation .conservation-projects {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding-bottom: 48px;
+  }
+  .page-research-conservation .conservation-projects article {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    grid-row: auto;
+  }
+}
+@media (max-width: 640px) {
+  .page-research-conservation .conservation-introduction {
+    font-size: 1rem;
+  }
+  .page-research-conservation .conservation-projects article {
+    padding-top: 22px;
+  }
+}
