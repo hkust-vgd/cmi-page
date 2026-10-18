@@ -1,66 +1,65 @@
-/* Conservation page additions; shared navigation and other pages stay intact. */
-.page-research-conservation .conservation-introduction {
-  max-width: 940px;
-  margin: 24px 0 0;
-  color: var(--muted);
-  font-size: 1.0625rem;
-  line-height: 1.75;
+/* D4 follows the sub-direction map and study rows used by D1 and D2.
+   All rules are scoped to this page. Original research imagery is preserved. */
+.page-research-conservation .conservation-introduction { max-width:940px; margin:24px 0 0; color:var(--muted); font-size:1.0625rem; line-height:1.75; }
+.page-research-conservation .theme-label { margin:0 0 12px; color:var(--muted); font-size:.75rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; }
+.page-research-conservation .sub-map { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:64px; }
+.page-research-conservation .sub-map a { display:flex; flex-direction:column; gap:6px; padding:20px 20px 22px; border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:0 0 14px 14px; background:white; transition:background .2s,border-color .2s; }
+.page-research-conservation .sub-map a:hover,
+.page-research-conservation .sub-map a:focus-visible { border-color:var(--blue); background:var(--pale); }
+.page-research-conservation .sub-map span { color:var(--blue); font-size:.8125rem; font-weight:700; }
+.page-research-conservation .sub-map b { font-size:1.0625rem; line-height:1.35; letter-spacing:-.01em; }
+.page-research-conservation .sub-map small { color:var(--muted); font-size:.875rem; line-height:1.55; }
+.page-research-conservation .conservation-theme + .conservation-theme::before { content:""; display:block; height:1px; margin-bottom:64px; background:var(--line); }
+.page-research-conservation .theme-study-block { margin-bottom:28px; }
+.page-research-conservation .theme-study { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px; margin:0; padding:0; list-style:none; border-top:1px solid var(--line); }
+.page-research-conservation .theme-study li { padding:14px 0; border-bottom:1px solid var(--line); }
+.page-research-conservation .theme-study h3 { margin:0; font-size:1rem; line-height:1.4; letter-spacing:-.01em; }
+.page-research-conservation .theme-study p { margin:4px 0 0; color:var(--muted); font-size:.875rem; line-height:1.55; }
+.page-research-conservation .project-feature { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); align-items:start; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:white; }
+.page-research-conservation .feature-figure { min-width:0; margin:0; }
+.page-research-conservation .feature-media { display:block; padding:16px; cursor:zoom-in; }
+/* Separate proportional viewports exclude the embedded titles. Original pixels stay intact. */
+.page-research-conservation .conservation-panel { position:relative; display:block; overflow:hidden; }
+.page-research-conservation .conservation-panel img { position:absolute; display:block; width:100%; max-width:none; height:auto; left:0; }
+.page-research-conservation .coast-panel { aspect-ratio:1651 / 924; }
+.page-research-conservation .coast-panel img { top:-6.060606%; }
+.page-research-conservation .pier-panel { aspect-ratio:1651 / 982; }
+.page-research-conservation .pier-panel img { top:-105.397148%; }
+.page-research-conservation .feature-figure figcaption { padding:16px 20px; border-top:1px solid var(--line); color:var(--muted); background:var(--pale); font-size:.8125rem; line-height:1.6; }
+.page-research-conservation .project-copy { padding:28px; min-width:0; }
+.page-research-conservation .work-team { margin:0 0 10px; color:var(--blue); font-size:.75rem; font-weight:600; }
+.page-research-conservation .project-copy h3,
+.page-research-conservation .restoration-card h3 { margin:0 0 14px; font-size:1.5rem; line-height:1.3; }
+.page-research-conservation .project-copy > p:not(.work-team),
+.page-research-conservation .restoration-card > p:not(.work-team) { margin:0; color:var(--muted); font-size:.9375rem; line-height:1.75; }
+.page-research-conservation .project-copy .text-link,
+.page-research-conservation .restoration-card .text-link { margin-top:22px; font-size:.875rem; }
+.page-research-conservation .restoration-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.page-research-conservation .restoration-card { padding:28px; border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:0 0 14px 14px; background:white; }
+.page-research-conservation .theme-boundary { margin:20px 0 0; padding:16px 20px; border-left:4px solid var(--accent); border-radius:0 12px 12px 0; background:var(--pale); color:var(--muted); font-size:.9375rem; line-height:1.65; }
+.page-research-conservation .theme-boundary b { color:var(--ink); }
+.page-research-conservation .conservation-detail::before { content:""; grid-column:1/-1; height:1px; background:var(--line); }
+.page-research-conservation .conservation-detail .priorities p { margin:8px 0 0; font-size:1rem; }
+.page-research-conservation .conservation-detail .priorities a:hover { color:var(--blue); }
+@media(max-width:1000px) {
+  .page-research-conservation .project-feature { grid-template-columns:1fr; }
+  .page-research-conservation .project-copy { border-top:1px solid var(--line); }
 }
-.page-research-conservation .conservation-figure-description {
-  flex: 1 1 440px;
-  min-width: 0;
+@media(max-width:640px) {
+  .page-research-conservation .conservation-introduction { font-size:1rem; }
+  .page-research-conservation .sub-map,
+  .page-research-conservation .theme-study,
+  .page-research-conservation .restoration-grid { grid-template-columns:1fr; }
+  .page-research-conservation .sub-map { gap:10px; margin-bottom:44px; }
+  .page-research-conservation .sub-map a { padding:16px 18px 18px; }
+  .page-research-conservation .conservation-theme + .conservation-theme::before { margin-bottom:44px; }
+  .page-research-conservation .theme-study { gap:0; }
+  .page-research-conservation .project-feature { border-radius:12px; }
+  .page-research-conservation .feature-media { padding:8px; }
+  .page-research-conservation .feature-figure figcaption { padding:14px 18px; }
+  .page-research-conservation .project-copy,
+  .page-research-conservation .restoration-card { padding:22px; }
 }
-.page-research-conservation .conservation-figure-description p {
-  margin: 0;
-}
-.page-research-conservation .conservation-projects {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 56px;
-  row-gap: 0;
-  padding-bottom: 72px;
-}
-.page-research-conservation .conservation-projects article {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 3;
-  justify-items: start;
-  border-top: 3px solid var(--accent);
-  padding-top: 26px;
-}
-.page-research-conservation .conservation-projects h3 {
-  font-size: clamp(1.45rem, 2.3vw, 1.85rem);
-  line-height: 1.25;
-  margin-bottom: 16px;
-}
-.page-research-conservation .conservation-projects p {
-  color: var(--muted);
-}
-.page-research-conservation .conservation-projects .text-link {
-  margin-top: auto;
-}
-.page-research-conservation .conservation-detail .priorities p {
-  margin: 8px 0 0;
-  font-size: 1rem;
-}
-@media (max-width: 860px) {
-  .page-research-conservation .conservation-projects {
-    grid-template-columns: 1fr;
-    gap: 36px;
-    padding-bottom: 48px;
-  }
-  .page-research-conservation .conservation-projects article {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    grid-row: auto;
-  }
-}
-@media (max-width: 640px) {
-  .page-research-conservation .conservation-introduction {
-    font-size: 1rem;
-  }
-  .page-research-conservation .conservation-projects article {
-    padding-top: 22px;
-  }
+@media(prefers-reduced-motion:reduce) {
+  .page-research-conservation .sub-map a { transition:none; }
 }
