@@ -148,7 +148,8 @@ disclosures.forEach(item => {
   item.button.addEventListener('click', () => {
     const current = window.location.pathname.split('/').pop() || 'index.html';
     if (current !== item.page) {
-      window.location.href = `${item.page}#${item.hash}`;
+      const onMobile = window.matchMedia('(max-width: 980px)').matches;
+      window.location.href = onMobile ? item.page : `${item.page}#${item.hash}`;
       return;
     }
     setDisclosureOpen(item, true);
