@@ -293,13 +293,6 @@
   }
 }
 
-/* 3D/4D mapping: Photo-SLAM WebGL viewer with NemoSplat beside it */
-.page-research-observation .mapping-demos {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 20px;
-  align-items: stretch;
-}
 .page-research-observation .splat-viewer {
   display: flex;
   flex-direction: column;
@@ -426,10 +419,6 @@
   line-height: 1.55;
 }
 @media (max-width: 860px) {
-  .page-research-observation .mapping-demos,
-  .page-research-observation .mapping-works {
-    grid-template-columns: 1fr;
-  }
   .page-research-observation .splat-viewer figcaption {
     flex-wrap: wrap;
   }
@@ -576,7 +565,7 @@
 }
 
 /* WAT3R reconstruction demo beside the Photo-SLAM viewer */
-.page-research-observation .demo-video {
+.page-research-observation .demo-panel {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -624,7 +613,7 @@
   background: var(--blue);
   color: #fff;
 }
-.page-research-observation .demo-video figcaption {
+.page-research-observation .demo-panel figcaption {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -636,26 +625,6 @@
   color: var(--muted);
   font-size: .875rem;
   line-height: 1.6;
-}
-/* 360DVO and NemoSplat under the demos */
-.page-research-observation .mapping-works {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-.page-research-observation .mapping-works .mapping-card {
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-  padding: 12px;
-}
-.page-research-observation .mapping-works .mapping-thumb {
-  flex: 0 0 46%;
-  margin: 0;
-}
-.page-research-observation .mapping-works .mapping-card small {
-  padding-bottom: 4px;
 }
 .page-research-observation .mapping-fit ol {
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -673,14 +642,72 @@
   }
 }
 @media (max-width: 640px) {
-  .page-research-observation .mapping-works .mapping-card {
-    flex-direction: column;
-    align-items: stretch;
-  }
   .page-research-observation .mapping-fit ol {
     grid-template-columns: 1fr;
   }
   .page-research-observation .mapping-fit li + li::before {
     content: none;
+  }
+}
+
+/* Marine 3D/4D Mapping: four equal panels (Photo-SLAM viewer, 360DVO, WAT3R, NemoSplat) */
+.page-research-observation .mapping-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.page-research-observation .mapping-grid .splat-stage {
+  flex: none;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+}
+.page-research-observation .mapping-grid figcaption {
+  flex: 1;
+}
+.page-research-observation .demo-stage {
+  flex: none;
+}
+.page-research-observation .demo-stage video,
+.page-research-observation .demo-stage img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #fff;
+}
+.page-research-observation .demo-stage [hidden] {
+  display: none;
+}
+/* On narrow screens the wide joint figures give way to their card lists */
+.page-research-observation .diagram-mobile {
+  display: none;
+}
+@media (max-width: 860px) {
+  .page-research-observation .mapping-grid {
+    grid-template-columns: 1fr;
+  }
+  .page-research-observation .diagram {
+    display: none;
+  }
+  .page-research-observation .diagram-mobile {
+    display: block;
+  }
+  .page-research-observation .diagram-mobile + .theme-boundary {
+    margin-top: 16px;
+  }
+}
+@media (max-width: 640px) {
+  .page-research-observation .clip-tabs {
+    right: 8px;
+    bottom: 8px;
+  }
+  .page-research-observation .clip-tab {
+    padding: 4px 9px;
+    font-size: .75rem;
+  }
+  .page-research-observation .splat-badge {
+    right: 14px;
+    font-size: .75rem;
   }
 }

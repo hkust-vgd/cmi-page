@@ -66,17 +66,34 @@ if (figure && figure.dataset.splat && webgl2()) {
   observer.observe(stage);
 }
 
-// WAT3R demo: switch between the reconstruction clips.
-const demo = document.querySelector('.demo-video');
-if (demo) {
-  const video = demo.querySelector('video');
-  demo.querySelectorAll('.clip-tab').forEach((tab) => {
+// Demo panels (360DVO, WAT3R, NemoSplat): switch between clips and figures; pause videos while off screen.
+document.querySelectorAll('.demo-panel').forEach((panel) => {
+  const video = panel.querySelector('video');
+  const img = panel.querySelector('.demo-stage img');
+  panel.querySelectorAll('.clip-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
-      const clip = tab.dataset.clip;
-      demo.querySelectorAll('.clip-tab').forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
-      video.poster = `assets/research-observation/wat3r-${clip}.webp`;
-      video.src = `assets/research-observation/wat3r-${clip}.mp4`;
-      video.play().catch(() => {});
+      panel.querySelectorAll('.clip-tab').forEach((t) => t.setAttribute('aria-pressed', String(t === tab)));
+      if (tab.dataset.kind === 'video') {
+        img.hidden = true;
+        video.hidden = false;
+        video.poster = tab.dataset.poster || '';
+        video.src = tab.dataset.src;
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+        video.hidden = true;
+        img.src = tab.dataset.src;
+        img.hidden = false;
+      }
     });
   });
-}
+  if (video && 'IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (video.hidden) return;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }).observe(video);
+  }
+});
