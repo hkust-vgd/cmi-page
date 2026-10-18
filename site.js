@@ -496,3 +496,19 @@ document.querySelectorAll('.resource-slideshow').forEach((show) => {
   reduceMotion.addEventListener('change', start);
   start();
 });
+
+// Resources index: filter chips (the list stays fully visible without JavaScript).
+document.querySelectorAll('.res-filter').forEach((group) => {
+  const list = document.getElementById(group.dataset.target);
+  if (!list) return;
+  const buttons = [...group.querySelectorAll('button[data-filter]')];
+  const items = [...list.querySelectorAll('[data-kind]')];
+  group.hidden = false;
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const kind = button.dataset.filter;
+      buttons.forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+      items.forEach((item) => { item.hidden = kind !== 'all' && item.dataset.kind !== kind; });
+    });
+  });
+});
