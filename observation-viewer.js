@@ -26,7 +26,19 @@ async function start(stage, src) {
       sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant,
       logLevel: GaussianSplats3D.LogLevel.None
     });
-    await viewer.addSplatScene(src, { showLoadingUI: false, splatAlphaRemovalThreshold: 5 });
+    // GitHub Pages gzips binary files and reports the compressed Content-Length, which stalls the library's own loader.
+    // Download the map ourselves (the browser decompresses it) and hand the viewer a local blob of the right size.
+    const response = await fetch(src);
+    if (!response.ok) throw new Error('map not found');
+    const blobUrl = URL.createObjectURL(new Blob([await response.arrayBuffer()]));
+    const ext = src.split('?')[0].split('.').pop().toLowerCase();
+    const format = { splat: 'Splat', ksplat: 'KSplat', ply: 'Ply', spz: 'Spz' }[ext];
+    await viewer.addSplatScene(blobUrl, {
+      format: GaussianSplats3D.SceneFormat[format],
+      showLoadingUI: false,
+      progressiveLoad: false,
+      splatAlphaRemovalThreshold: 5
+    });
     viewer.start();
     if (viewer.renderer) viewer.renderer.setClearColor(0x0a3550, 1);
     const controls = viewer.controls;
