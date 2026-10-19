@@ -114,3 +114,19 @@ if ('IntersectionObserver' in window) {
 } else {
   figures.forEach((figure) => figure.classList.add('in-view'));
 }
+
+// 3D/4D Mapping: reveal each panel, step and note as it scrolls into view.
+const reveals = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach((el) => revealObserver.observe(el));
+} else {
+  reveals.forEach((el) => el.classList.add('in-view'));
+}
