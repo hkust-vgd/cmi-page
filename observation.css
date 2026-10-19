@@ -764,3 +764,46 @@
     transform: none;
   }
 }
+
+/* Entrance animation of the joint figures: parts appear in order (--i) and arrows draw in once a figure scrolls into view.
+   The page script adds .js-anim to <html>, so without JavaScript the figures are simply shown. */
+.page-research-observation .diagram .anim {
+  transform-box: fill-box;
+  transition: opacity .55s ease, transform .55s ease;
+  transition-delay: calc(var(--i, 0) * 110ms);
+}
+html.js-anim .page-research-observation .diagram:not(.in-view) .anim {
+  opacity: 0;
+  transform: translateY(12px);
+}
+html.js-anim .page-research-observation .diagram .anim-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset .7s ease;
+  transition-delay: calc(var(--i, 0) * 110ms + 120ms);
+}
+html.js-anim .page-research-observation .diagram.in-view .anim-draw {
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim .page-research-observation .diagram:not(.in-view) .anim {
+    opacity: 1;
+    transform: none;
+  }
+  html.js-anim .page-research-observation .diagram .anim-draw {
+    stroke-dashoffset: 0;
+  }
+  .page-research-observation .diagram .anim,
+  html.js-anim .page-research-observation .diagram .anim-draw {
+    transition: none;
+  }
+}
+@media print {
+  html.js-anim .page-research-observation .diagram .anim {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  html.js-anim .page-research-observation .diagram .anim-draw {
+    stroke-dashoffset: 0 !important;
+  }
+}

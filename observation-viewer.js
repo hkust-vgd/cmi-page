@@ -97,3 +97,20 @@ document.querySelectorAll('.demo-panel').forEach((panel) => {
     }).observe(video);
   }
 });
+
+// Joint figures: play the entrance animation once each figure is about a quarter visible.
+document.documentElement.classList.add('js-anim');
+const figures = document.querySelectorAll('.diagram');
+if ('IntersectionObserver' in window) {
+  const figureObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        figureObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+  figures.forEach((figure) => figureObserver.observe(figure));
+} else {
+  figures.forEach((figure) => figure.classList.add('in-view'));
+}
