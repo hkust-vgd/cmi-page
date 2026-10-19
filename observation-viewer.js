@@ -22,7 +22,8 @@ const FORMATS = { splat: 'Splat', ksplat: 'KSplat', ply: 'Ply', spz: 'Spz' };
 const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// A map is either one splat file, or a scene.json listing its parts (e.g. seabed, coral, rock) with the camera set-up.
+// A map is either one splat file, or a scene.json listing its parts (splat files that together make the scene), the
+// objects visitors can pick (each one or more parts, e.g. a coral) and the camera set-up.
 async function readScene(src) {
   if (!src.split('?')[0].endsWith('.json')) return { parts: [{ file: src }], base: '' };
   const response = await fetch(src);
@@ -67,7 +68,7 @@ async function start(stage, src) {
       controls.autoRotateSpeed = 0.5;
       controls.addEventListener('start', () => { controls.autoRotate = false; });
     }
-    if (scene.parts.some((part) => part.select)) enableSelection(stage, viewer, scene, THREE);
+    if (scene.objects && scene.objects.length) enableSelection(stage, viewer, scene, THREE);
     stage.classList.remove('is-loading');
     stage.classList.add('is-ready');
   } catch (err) {
@@ -76,13 +77,12 @@ async function start(stage, src) {
   }
 }
 
-// Part selection: buttons for the whole scene and each selectable part (here the coral and the rock); clicking a part
-// in the view selects it too.
-// The other parts fade out, and the camera eases towards the selection.
+// Object selection: buttons for the whole scene and each object (here two corals); clicking an object in the view selects
+// it too. The other parts fade out and the camera eases in to frame it; clicking the background goes back.
 function enableSelection(stage, viewer, scene, THREE) {
   const mesh = viewer.splatMesh;
-  const options = [{ label: 'Whole scene', index: -1 }];
-  scene.parts.forEach((part, index) => { if (part.select) options.push({ label: part.label, index }); });
+  const objects = scene.objects;
+  const options = [{ label: 'Whole scene', index: -1 }, ...objects.map((object, index) => ({ label: object.label, index }))];
   const group = document.createElement('div');
   group.className = 'clip-tabs';
   group.setAttribute('role', 'group');
@@ -103,7 +103,7 @@ function enableSelection(stage, viewer, scene, THREE) {
   let selected = -1;
   let fade = 0;
   let move = 0;
-  // The hint says what a click does now: pick a part, or, while one is shown alone, go back to the whole scene.
+  // The hint says what a click does now: pick an object, or, while one is shown alone, go back to the whole scene.
   function showHint() {
     if (!hint) return;
     const action = selected < 0 ? scene.hint || 'click an object to show it on its own'
@@ -147,16 +147,17 @@ function enableSelection(stage, viewer, scene, THREE) {
     selected = index;
     stage.classList.remove('is-pickable', 'is-returnable');
     buttons.forEach((button, k) => button.setAttribute('aria-pressed', String(options[k].index === index)));
-    setOpacities((i) => (index < 0 || i === index ? 1 : 0), 600);
-    if (withCamera) moveCamera(index < 0 ? scene : scene.parts[index]);
+    const shown = index < 0 ? null : new Set(objects[index].parts);
+    setOpacities((i) => (!shown || shown.has(i) ? 1 : 0), 600);
+    if (withCamera) moveCamera(index < 0 ? scene : objects[index]);
     showHint();
   }
   select(-1, false);
 
-  // Which selectable part is visible at a point in the view. The library's own test treats each splat as a solid ball
-  // of its core size, so faint splats in front catch clicks and clicks slip between the rock's few large splats.
-  // Instead, follow the ray through every splat it passes (hidden parts are skipped) and blend their opacity front to
-  // back as the renderer does; a part counts once it makes up a fair share of that pixel.
+  // How much of the pixel at a point in the view each object makes up. The library's own test treats each splat as a
+  // solid ball of its core size, so faint splats in front catch clicks and clicks slip between large splats. Instead,
+  // follow the ray through every splat it passes (hidden parts are skipped) and blend their opacity front to back as
+  // the renderer does; an object's share is that of its parts.
   viewer.raycaster.raycastAgainstTrueSplatEllipsoid = true; // candidate splats out to their visible edge
   const colour = new THREE.Vector4();
   const centre = new THREE.Vector3();
@@ -164,7 +165,8 @@ function enableSelection(stage, viewer, scene, THREE) {
   const rotation = new THREE.Quaternion();
   const local = new THREE.Vector3();
   const heading = new THREE.Vector3();
-  function partAt(x, y) {
+  const VISIBLE = 0.2; // an object counts once it makes up this much of the pixel
+  function objectShares(x, y) {
     viewer.raycaster.setFromCameraAndScreenPosition(viewer.camera, { x, y }, { x: stage.offsetWidth, y: stage.offsetHeight });
     const ray = viewer.raycaster.ray;
     const layers = viewer.raycaster.intersectSplatMesh(mesh, []).map((hit) => {
@@ -190,20 +192,18 @@ function enableSelection(stage, viewer, scene, THREE) {
       transmittance *= 1 - layer.alpha;
       if (transmittance < 0.02) break;
     }
+    return objects.map((object) => object.parts.reduce((sum, part) => sum + (share.get(part) || 0), 0));
+  }
+  // In the whole scene: the object that makes up most of the pixel, if any does enough.
+  function objectAt(shares) {
     let best = -1;
-    let most = 0.2;
-    share.forEach((value, part) => {
-      if (scene.parts[part].select && value > most) {
-        best = part;
-        most = value;
-      }
-    });
+    shares.forEach((value, k) => { if (value >= VISIBLE && (best < 0 || value > shares[best])) best = k; });
     return best;
   }
 
   // Clicks and taps are handled here instead of by the library, which re-centres the view on any clicked point.
-  // Whole scene: a click on a part selects it, anywhere else keeps the library's re-centring.
-  // One part shown alone: a click beside it (on the background) goes back to the whole scene.
+  // Whole scene: a click on an object selects it, anywhere else keeps the library's re-centring.
+  // One object shown alone: a click beside it (on the background) goes back to the whole scene.
   const focusOnPoint = viewer.checkForFocalPointChange;
   viewer.checkForFocalPointChange = () => {};
   let down = null;
@@ -221,26 +221,26 @@ function enableSelection(stage, viewer, scene, THREE) {
     const rect = stage.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    const index = partAt(x, y);
+    const shares = objectShares(x, y);
     if (selected >= 0) {
-      if (index !== selected) select(-1, true);
-    } else if (index >= 0) {
-      select(index, true);
+      if (shares[selected] < VISIBLE) select(-1, true);
+    } else if (objectAt(shares) >= 0) {
+      select(objectAt(shares), true);
     } else {
       viewer.mousePosition.set(x, y);
       focusOnPoint.call(viewer);
     }
   });
 
-  // Cursor: a pointer over a part that can be picked; a zoom-out cursor over the background while one part is shown.
+  // Cursor: a pointer over an object that can be picked; a zoom-out cursor over the background while one is shown.
   let last = 0;
   stage.addEventListener('pointermove', (event) => {
     if (event.buttons || event.target.closest('.clip-tabs') || performance.now() - last < 80) return;
     last = performance.now();
     const rect = stage.getBoundingClientRect();
-    const index = partAt(event.clientX - rect.left, event.clientY - rect.top);
-    stage.classList.toggle('is-pickable', selected < 0 && index >= 0);
-    stage.classList.toggle('is-returnable', selected >= 0 && index !== selected);
+    const shares = objectShares(event.clientX - rect.left, event.clientY - rect.top);
+    stage.classList.toggle('is-pickable', selected < 0 && objectAt(shares) >= 0);
+    stage.classList.toggle('is-returnable', selected >= 0 && shares[selected] < VISIBLE);
   });
 }
 

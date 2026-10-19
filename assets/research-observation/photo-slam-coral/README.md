@@ -1,17 +1,20 @@
 # Photo-SLAM coral scene (baseline)
 
-Gaussian-splat map shown in the Photo-SLAM panel of `research-observation.html`, split into parts so visitors can
-show the coral or the rock on its own.
+Gaussian-splat map shown in the Photo-SLAM panel of `research-observation.html`. Visitors can pick either coral and see
+it on its own.
 
 | File | Contents |
 |---|---|
-| `scene.json` | Up axis (seabed normal), whole-scene camera, hint text, and the parts in load order. Parts with `"select": true` get a button and can be clicked in the view; their `target`/`camera` frame them when selected. |
-| `seabed.ply` | Everything that is not selectable (sand, rubble) |
-| `coral.ply`, `rock.ply` | The selectable objects |
+| `scene.json` | Up axis (seabed normal), whole-scene camera, hint text, the parts in load order, and the objects visitors can pick: each object lists its parts and the camera that frames it. |
+| `seabed.ply` | Every splat that belongs to neither coral |
+| `coral-1.ply`, `coral-2.ply` | Splats that belong to one coral only |
+| `shared-1-2.ply` | 129 splats that both coral files contain; shown with either coral |
 
-Made from `coral-guo.ply` (27,086 Gaussians) with the preprocessing scripts kept alongside the page generators,
-outside this repository: `features.py` fits the seabed plane, `segment.py` separates the raised objects (plus one
-manual fix-up), `split_scene.py` writes these files. The view-dependent colour terms (`f_rest_*`) are dropped to keep the download small (1.5 MB in total).
+Made from the lab's baseline map `coral-guo.ply` (27,086 Gaussians) and its two coral segments `coral-guo-1.ply`
+(9,747) and `coral-guo-2.ply` (3,521), which are exact subsets of it. Each splat is stored once, so the whole scene is
+the original map, and each coral shown on its own is exactly its segment file. The view-dependent colour terms
+(`f_rest_*`) are dropped to keep the download small (1.5 MB in total); the page renders base colours.
 
-To show a new map, either replace these files (same `scene.json` format) or point `SPLAT_SRC` in
-`observation_page.py` at a single `.ply`, `.splat` or `.ksplat` file.
+The split is made with `split_from_parts.py`, kept with the page generators outside this repository. To update, rerun it
+with the new files (bump `VERSION` there and the `?v=` of `SPLAT_SRC` in `observation_page.py`), or point `SPLAT_SRC`
+at a single `.ply`, `.splat` or `.ksplat` file.
