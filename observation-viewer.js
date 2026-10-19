@@ -35,7 +35,7 @@ async function readScene(src) {
 async function start(stage, src) {
   stage.classList.add('is-loading');
   try {
-    const GaussianSplats3D = await import('@mkkellogg/gaussian-splats-3d');
+    const [GaussianSplats3D, THREE] = await Promise.all([import('@mkkellogg/gaussian-splats-3d'), import('three')]);
     const scene = await readScene(src);
     const mount = stage.querySelector('.splat-canvas');
     const viewer = new GaussianSplats3D.Viewer({
@@ -67,7 +67,7 @@ async function start(stage, src) {
       controls.autoRotateSpeed = 0.5;
       controls.addEventListener('start', () => { controls.autoRotate = false; });
     }
-    if (scene.parts.some((part) => part.select)) enableSelection(stage, viewer, scene);
+    if (scene.parts.some((part) => part.select)) enableSelection(stage, viewer, scene, THREE);
     stage.classList.remove('is-loading');
     stage.classList.add('is-ready');
   } catch (err) {
@@ -79,7 +79,7 @@ async function start(stage, src) {
 // Part selection: buttons for the whole scene and each selectable part (here the coral and the rock); clicking a part
 // in the view selects it too.
 // The other parts fade out, and the camera eases towards the selection.
-function enableSelection(stage, viewer, scene) {
+function enableSelection(stage, viewer, scene, THREE) {
   const mesh = viewer.splatMesh;
   const options = [{ label: 'Whole scene', index: -1 }];
   scene.parts.forEach((part, index) => { if (part.select) options.push({ label: part.label, index }); });
@@ -99,15 +99,17 @@ function enableSelection(stage, viewer, scene) {
   stage.append(group);
   const hint = stage.querySelector('.splat-hint');
   const touch = window.matchMedia('(pointer: coarse)').matches;
-  const action = scene.hint || 'click an object to show it on its own';
-  if (hint) {
-    hint.textContent = touch ? `Drag to orbit · pinch to zoom · ${action.replace(/^click/, 'tap')}`
-      : `Drag to orbit · scroll to zoom · ${action}`;
-  }
 
   let selected = -1;
   let fade = 0;
   let move = 0;
+  // The hint says what a click does now: pick a part, or, while one is shown alone, go back to the whole scene.
+  function showHint() {
+    if (!hint) return;
+    const action = selected < 0 ? scene.hint || 'click an object to show it on its own'
+      : 'click the background to see the whole scene';
+    hint.textContent = `Drag to orbit · ${touch ? 'pinch' : 'scroll'} to zoom · ${touch ? action.replace(/^click/, 'tap') : action}`;
+  }
   function setOpacities(goal, duration) {
     const from = scene.parts.map((part, i) => mesh.getScene(i).opacity);
     const t0 = performance.now();
@@ -143,38 +145,102 @@ function enableSelection(stage, viewer, scene) {
   }
   function select(index, withCamera) {
     selected = index;
-    if (index >= 0) stage.classList.remove('is-pickable');
+    stage.classList.remove('is-pickable', 'is-returnable');
     buttons.forEach((button, k) => button.setAttribute('aria-pressed', String(options[k].index === index)));
     setOpacities((i) => (index < 0 || i === index ? 1 : 0), 600);
     if (withCamera) moveCamera(index < 0 ? scene : scene.parts[index]);
+    showHint();
   }
   select(-1, false);
 
-  // Find the part at a point in the view (the library's raycaster skips hidden parts).
+  // Which selectable part is visible at a point in the view. The library's own test treats each splat as a solid ball
+  // of its core size, so faint splats in front catch clicks and clicks slip between the rock's few large splats.
+  // Instead, follow the ray through every splat it passes (hidden parts are skipped) and blend their opacity front to
+  // back as the renderer does; a part counts once it makes up a fair share of that pixel.
+  viewer.raycaster.raycastAgainstTrueSplatEllipsoid = true; // candidate splats out to their visible edge
+  const colour = new THREE.Vector4();
+  const centre = new THREE.Vector3();
+  const scale = new THREE.Vector3();
+  const rotation = new THREE.Quaternion();
+  const local = new THREE.Vector3();
+  const heading = new THREE.Vector3();
   function partAt(x, y) {
-    const hits = [];
     viewer.raycaster.setFromCameraAndScreenPosition(viewer.camera, { x, y }, { x: stage.offsetWidth, y: stage.offsetHeight });
-    viewer.raycaster.intersectSplatMesh(mesh, hits);
-    return hits.length ? mesh.getSceneIndexForSplat(hits[0].splatIndex) : -1;
-  }
-  // A click normally re-centres the view on the clicked point. On a selectable part, select and frame it instead.
-  const focusOnPoint = viewer.checkForFocalPointChange;
-  viewer.checkForFocalPointChange = function () {
-    const index = partAt(viewer.mousePosition.x, viewer.mousePosition.y);
-    if (index >= 0 && scene.parts[index].select) {
-      if (index !== selected) select(index, true);
-      return;
+    const ray = viewer.raycaster.ray;
+    const layers = viewer.raycaster.intersectSplatMesh(mesh, []).map((hit) => {
+      mesh.getSplatColor(hit.splatIndex, colour);
+      mesh.getSplatCenter(hit.splatIndex, centre);
+      mesh.getSplatScaleAndRotation(hit.splatIndex, scale, rotation);
+      rotation.invert();
+      // In the splat's own frame the Gaussian is a unit sphere: its peak along the ray is at the closest approach.
+      local.copy(ray.origin).sub(centre).applyQuaternion(rotation).divide(scale);
+      heading.copy(ray.direction).applyQuaternion(rotation).divide(scale);
+      const dot = local.dot(heading);
+      const nearest = local.lengthSq() - (dot * dot) / heading.lengthSq();
+      return {
+        depth: centre.sub(ray.origin).dot(ray.direction),
+        alpha: Math.min(0.99, (colour.w / 255) * Math.exp(-0.5 * nearest)),
+        part: mesh.getSceneIndexForSplat(hit.splatIndex)
+      };
+    }).sort((a, b) => a.depth - b.depth);
+    const share = new Map();
+    let transmittance = 1;
+    for (const layer of layers) {
+      share.set(layer.part, (share.get(layer.part) || 0) + transmittance * layer.alpha);
+      transmittance *= 1 - layer.alpha;
+      if (transmittance < 0.02) break;
     }
-    focusOnPoint.call(viewer);
-  };
-  // In the whole-scene view, show which parts can be picked.
+    let best = -1;
+    let most = 0.2;
+    share.forEach((value, part) => {
+      if (scene.parts[part].select && value > most) {
+        best = part;
+        most = value;
+      }
+    });
+    return best;
+  }
+
+  // Clicks and taps are handled here instead of by the library, which re-centres the view on any clicked point.
+  // Whole scene: a click on a part selects it, anywhere else keeps the library's re-centring.
+  // One part shown alone: a click beside it (on the background) goes back to the whole scene.
+  const focusOnPoint = viewer.checkForFocalPointChange;
+  viewer.checkForFocalPointChange = () => {};
+  let down = null;
+  stage.addEventListener('pointerdown', (event) => {
+    // A second finger (pinch) cancels the tap.
+    down = event.isPrimary && !event.target.closest('.clip-tabs')
+      ? { x: event.clientX, y: event.clientY, time: performance.now() } : null;
+  });
+  stage.addEventListener('pointercancel', () => { down = null; });
+  stage.addEventListener('pointerup', (event) => {
+    const start = down;
+    down = null;
+    if (!start || !event.isPrimary || performance.now() - start.time > 500
+      || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6) return; // a drag, not a click
+    const rect = stage.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const index = partAt(x, y);
+    if (selected >= 0) {
+      if (index !== selected) select(-1, true);
+    } else if (index >= 0) {
+      select(index, true);
+    } else {
+      viewer.mousePosition.set(x, y);
+      focusOnPoint.call(viewer);
+    }
+  });
+
+  // Cursor: a pointer over a part that can be picked; a zoom-out cursor over the background while one part is shown.
   let last = 0;
   stage.addEventListener('pointermove', (event) => {
-    if (selected >= 0 || event.buttons || event.target.closest('.clip-tabs') || performance.now() - last < 80) return;
+    if (event.buttons || event.target.closest('.clip-tabs') || performance.now() - last < 80) return;
     last = performance.now();
     const rect = stage.getBoundingClientRect();
     const index = partAt(event.clientX - rect.left, event.clientY - rect.top);
-    stage.classList.toggle('is-pickable', index >= 0 && !!scene.parts[index].select);
+    stage.classList.toggle('is-pickable', selected < 0 && index >= 0);
+    stage.classList.toggle('is-returnable', selected >= 0 && index !== selected);
   });
 }
 
@@ -221,35 +287,28 @@ document.querySelectorAll('.demo-panel').forEach((panel) => {
   }
 });
 
-// Joint figures: play the entrance animation once each figure is about a quarter visible.
+// Page animations (see observation.css): joint figures play their part-by-part entrance, and .reveal blocks and
+// .reveal-group items fade in and rise, each once its top edge is a little way up the screen, so the whole page moves
+// the same way as it scrolls. Anything already on screen when the page opens is shown as it is, without a flicker.
+const animated = document.querySelectorAll('.diagram, .reveal, .reveal-group');
+document.querySelectorAll('.reveal-group').forEach((group) => {
+  [...group.children].forEach((child, k) => child.style.setProperty('--i', Math.min(k, 5)));
+});
+animated.forEach((el) => {
+  const box = el.getBoundingClientRect();
+  if (box.bottom > 0 && box.top < window.innerHeight * 0.88) el.classList.add('in-view');
+});
 document.documentElement.classList.add('js-anim');
-const figures = document.querySelectorAll('.diagram');
 if ('IntersectionObserver' in window) {
-  const figureObserver = new IntersectionObserver((entries) => {
+  const pageObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('in-view');
-        figureObserver.unobserve(entry.target);
+        pageObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.25 });
-  figures.forEach((figure) => figureObserver.observe(figure));
+  }, { rootMargin: '0px 0px -12% 0px' });
+  animated.forEach((el) => { if (!el.classList.contains('in-view')) pageObserver.observe(el); });
 } else {
-  figures.forEach((figure) => figure.classList.add('in-view'));
-}
-
-// 3D/4D Mapping: reveal each panel, step and note as it scrolls into view.
-const reveals = document.querySelectorAll('.reveal');
-if ('IntersectionObserver' in window) {
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  reveals.forEach((el) => revealObserver.observe(el));
-} else {
-  reveals.forEach((el) => el.classList.add('in-view'));
+  animated.forEach((el) => el.classList.add('in-view'));
 }

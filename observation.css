@@ -489,6 +489,9 @@
 .page-research-observation .splat-stage.is-pickable {
   cursor: pointer;
 }
+.page-research-observation .splat-stage.is-returnable {
+  cursor: zoom-out;
+}
 .page-research-observation .splat-stage:not(.is-ready) .splat-hint {
   display: none;
 }
@@ -782,11 +785,14 @@
   }
 }
 
-/* Entrance animations for the sub-directions. Joint figures: parts appear in order (--i) and arrows draw in once a
-   figure scrolls into view. 3D/4D Mapping: each panel, step and note reveals as it enters. The page script adds
-   .js-anim to <html>, so without JavaScript everything is simply shown. Slow ease-out for a soft, natural feel. */
+/* Page animations, one motion for the whole page: blocks fade in and rise as they scroll into view.
+   .reveal is one block; in a .reveal-group the children follow one another. --i orders blocks that enter together,
+   --o holds a group back behind its label. Joint figures play their own part-by-part entrance (.anim, arrows drawing
+   in). The page script adds .js-anim to <html> and .in-view to each block, so without JavaScript everything is shown.
+   The overview cards at the top play on load (pure CSS, so nothing flickers). Slow ease-out for a soft, natural feel. */
 .page-research-observation {
   --reveal-ease: cubic-bezier(.16, 1, .3, 1);
+  --reveal-step: 180ms;
 }
 .page-research-observation .diagram .anim {
   transform-box: fill-box;
@@ -806,17 +812,42 @@ html.js-anim .page-research-observation .diagram .anim-draw {
 html.js-anim .page-research-observation .diagram.in-view .anim-draw {
   stroke-dashoffset: 0;
 }
-.page-research-observation .reveal {
+.page-research-observation .reveal,
+.page-research-observation .reveal-group > * {
   transition: opacity 1.1s var(--reveal-ease), transform 1.3s var(--reveal-ease);
-  transition-delay: calc(var(--i, 0) * 200ms);
+  transition-delay: calc((var(--i, 0) + var(--o, 0)) * var(--reveal-step));
 }
-html.js-anim .page-research-observation .reveal:not(.in-view) {
+html.js-anim .page-research-observation .reveal:not(.in-view),
+html.js-anim .page-research-observation .reveal-group:not(.in-view) > * {
   opacity: 0;
   transform: translateY(26px);
 }
+@keyframes observation-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+.page-research-observation .intro-cards > .theme-label,
+.page-research-observation .intro-cards .sub-map > * {
+  animation: observation-rise 1.2s var(--reveal-ease) both;
+}
+.page-research-observation .intro-cards .sub-map > :nth-child(1) {
+  animation-delay: 180ms;
+}
+.page-research-observation .intro-cards .sub-map > :nth-child(2) {
+  animation-delay: 360ms;
+}
+.page-research-observation .intro-cards .sub-map > :nth-child(3) {
+  animation-delay: 540ms;
+}
+.page-research-observation .intro-cards .sub-map > :nth-child(n+4) {
+  animation-delay: 720ms;
+}
 @media (prefers-reduced-motion: reduce) {
   html.js-anim .page-research-observation .diagram:not(.in-view) .anim,
-  html.js-anim .page-research-observation .reveal:not(.in-view) {
+  html.js-anim .page-research-observation .reveal:not(.in-view),
+  html.js-anim .page-research-observation .reveal-group:not(.in-view) > * {
     opacity: 1;
     transform: none;
   }
@@ -825,17 +856,27 @@ html.js-anim .page-research-observation .reveal:not(.in-view) {
   }
   .page-research-observation .diagram .anim,
   .page-research-observation .reveal,
+  .page-research-observation .reveal-group > *,
   html.js-anim .page-research-observation .diagram .anim-draw {
     transition: none;
+  }
+  .page-research-observation .intro-cards > .theme-label,
+  .page-research-observation .intro-cards .sub-map > * {
+    animation: none;
   }
 }
 @media print {
   html.js-anim .page-research-observation .reveal,
+  html.js-anim .page-research-observation .reveal-group > *,
   html.js-anim .page-research-observation .diagram .anim {
     opacity: 1 !important;
     transform: none !important;
   }
   html.js-anim .page-research-observation .diagram .anim-draw {
     stroke-dashoffset: 0 !important;
+  }
+  .page-research-observation .intro-cards > .theme-label,
+  .page-research-observation .intro-cards .sub-map > * {
+    animation: none !important;
   }
 }
