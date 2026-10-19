@@ -477,7 +477,17 @@
   font-weight: 600;
 }
 .page-research-observation .splat-hint {
+  top: 14px;
+  max-width: calc(100% - 28px);
+  border-radius: 14px;
+  line-height: 1.45;
+}
+.page-research-observation .splat-badge ~ .splat-hint {
+  top: auto;
   bottom: 14px;
+}
+.page-research-observation .splat-stage.is-pickable {
+  cursor: pointer;
 }
 .page-research-observation .splat-stage:not(.is-ready) .splat-hint {
   display: none;
@@ -708,6 +718,13 @@
   }
   .page-research-observation .splat-badge {
     right: 14px;
+    font-size: .75rem;
+  }
+  .page-research-observation .splat-hint {
+    left: 8px;
+    top: 8px;
+    max-width: calc(100% - 16px);
+    padding: 3px 10px;
     font-size: .75rem;
   }
 }

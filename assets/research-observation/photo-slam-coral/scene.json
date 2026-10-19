@@ -1,0 +1,54 @@
+{
+ "up": [
+  -0.0393,
+  -0.7096,
+  -0.7035
+ ],
+ "target": [
+  -0.037,
+  -0.1133,
+  1.02
+ ],
+ "camera": [
+  0.0019,
+  0.0057,
+  -0.051
+ ],
+ "hint": "click the coral or rock to show it alone",
+ "parts": [
+  {
+   "file": "seabed.ply",
+   "label": "Seabed"
+  },
+  {
+   "file": "coral.ply",
+   "label": "Coral",
+   "select": true,
+   "target": [
+    -0.1078,
+    -0.0481,
+    0.9444
+   ],
+   "camera": [
+    -0.0777,
+    0.044,
+    0.1159
+   ]
+  },
+  {
+   "file": "rock.ply",
+   "label": "Rock",
+   "select": true,
+   "target": [
+    0.2777,
+    -0.4036,
+    1.3566
+   ],
+   "camera": [
+    0.3062,
+    -0.3165,
+    0.5726
+   ]
+  }
+ ]
+}

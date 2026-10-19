@@ -1,6 +1,6 @@
 # Third-party code
 
-Used only by the 3D viewer on `research-observation.html` (Research Direction 01, Marine 3D/4D Mapping).
+Used only by the 3D viewer on `research-observation.html` (Research Program 01, Marine 3D/4D Mapping).
 
 | Folder | Package | Version | Licence | Source |
 |---|---|---|---|---|
