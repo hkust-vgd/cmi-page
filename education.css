@@ -1,38 +1,36 @@
-/* Education page: the same scroll-in motion as the research pages. The jump links rise in on load; each activity's
-   text, picture and cards fade in and rise as they scroll into view (education.js marks them .edu-reveal, then
-   .in-view). Without JavaScript, or with reduced motion, everything is simply shown. */
+/* Education page: the same scroll-in motion as the research pages, a little quicker. The jump links rise in on load;
+   each activity's text, picture and cards fade in and rise as they come into view, one after another in page order
+   (education.js). A small script in the page head hides them before the first paint, so nothing flickers; without
+   JavaScript, or with reduced motion, everything is simply shown. */
 .page-education {
   --reveal-ease: cubic-bezier(.16, 1, .3, 1);
-  --reveal-step: 180ms;
 }
-.page-education .edu-reveal {
-  transition: opacity 1.1s var(--reveal-ease), transform 1.3s var(--reveal-ease);
-  transition-delay: calc(var(--i, 0) * var(--reveal-step));
-}
-html.edu-anim .page-education .edu-reveal:not(.in-view) {
+html.edu-anim .page-education .research-direction .direction-content > :not(.edu-in),
+html.edu-anim .page-education .research-direction .direction-visual:not(.edu-in),
+html.edu-anim .page-education .research-direction .direction-activities li:not(.edu-in) {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(20px);
 }
 @keyframes edu-rise {
   from {
     opacity: 0;
-    transform: translateY(26px);
+    transform: translateY(20px);
   }
 }
 .page-education .direction-jumps > * {
-  animation: edu-rise 1.2s var(--reveal-ease) backwards;
+  animation: edu-rise 1s var(--reveal-ease) backwards;
 }
 .page-education .direction-jumps > :nth-child(1) {
-  animation-delay: 180ms;
+  animation-delay: 100ms;
 }
 .page-education .direction-jumps > :nth-child(2) {
-  animation-delay: 360ms;
+  animation-delay: 210ms;
 }
 .page-education .direction-jumps > :nth-child(3) {
-  animation-delay: 540ms;
+  animation-delay: 320ms;
 }
 .page-education .direction-jumps > :nth-child(n+4) {
-  animation-delay: 720ms;
+  animation-delay: 430ms;
 }
 @media (prefers-reduced-motion: reduce) {
   .page-education .direction-jumps > * {
@@ -40,7 +38,9 @@ html.edu-anim .page-education .edu-reveal:not(.in-view) {
   }
 }
 @media print {
-  html.edu-anim .page-education .edu-reveal {
+  html.edu-anim .page-education .research-direction .direction-content > *,
+  html.edu-anim .page-education .research-direction .direction-visual,
+  html.edu-anim .page-education .research-direction .direction-activities li {
     opacity: 1 !important;
     transform: none !important;
   }
