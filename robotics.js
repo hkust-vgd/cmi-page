@@ -82,6 +82,7 @@
   document.querySelectorAll('[data-video-preview]').forEach(preview => {
     const video = preview.querySelector('video');
     const button = preview.querySelector('.demo-toggle');
+    const videoLabel = preview.dataset.videoLabel || 'jellyfish robot';
     let wanted = false;
     let pinned = false;
     function stop() {
@@ -90,7 +91,7 @@
       video.pause();
       preview.classList.remove('is-playing');
       button.textContent = '▶ Play video';
-      button.setAttribute('aria-label', 'Play jellyfish robot video');
+      button.setAttribute('aria-label', `Play ${videoLabel} video`);
       button.setAttribute('aria-pressed', 'false');
     }
     function play() {
@@ -102,7 +103,7 @@
       if (!wanted) return stop();
       preview.classList.add('is-playing');
       button.textContent = 'Ⅱ Pause video';
-      button.setAttribute('aria-label', 'Pause jellyfish robot video');
+      button.setAttribute('aria-label', `Pause ${videoLabel} video`);
       button.setAttribute('aria-pressed', 'true');
     });
     preview.addEventListener('pointerenter', event => {
