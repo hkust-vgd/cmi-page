@@ -397,4 +397,4 @@ nav .section-active:after{content:'';height:3px;border-radius:2px;background:var
 .contact-enquiries>p{margin-bottom:20px}
 .contact-enquiries .button{min-height:60px}
 
-.lead-names{margin:0;color:var(--blue);font-size:.75rem;font-weight:600;line-height:1.8}
+.lead-names{margin:0 0 24px;color:var(--blue);font-size:.75rem;font-weight:600;line-height:1.8}
