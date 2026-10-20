@@ -296,7 +296,7 @@ document.querySelectorAll('.reveal-group').forEach((group) => {
 });
 animated.forEach((el) => {
   const box = el.getBoundingClientRect();
-  if (box.bottom > 0 && box.top < window.innerHeight * 0.88) el.classList.add('in-view');
+  if (box.bottom > 0 && box.top < window.innerHeight) el.classList.add('in-view');
 });
 document.documentElement.classList.add('js-anim');
 if ('IntersectionObserver' in window) {
