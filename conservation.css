@@ -18,6 +18,14 @@
 .page-research-conservation .project-feature { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); align-items:start; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:white; }
 .page-research-conservation .feature-figure { min-width:0; margin:0; }
 .page-research-conservation .feature-media { display:block; padding:16px; cursor:zoom-in; }
+.page-research-conservation .conservation-lightbox { position:fixed; inset:0; margin:auto; width:min(1200px,calc(100vw - 32px)); max-width:none; max-height:calc(100dvh - 32px); padding:18px; border:1px solid var(--line); border-radius:16px; color:var(--ink); background:white; box-shadow:0 24px 100px #06182855; }
+.page-research-conservation .conservation-lightbox::backdrop { background:#061828d9; }
+.page-research-conservation .conservation-lightbox-heading { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:16px; }
+.page-research-conservation .conservation-lightbox-heading h2 { margin:0; font-size:1.125rem; line-height:1.4; }
+.page-research-conservation .conservation-lightbox-heading button { flex-shrink:0; width:40px; height:40px; border:1px solid var(--line); border-radius:50%; color:var(--ink); background:white; cursor:pointer; font-size:1.5rem; line-height:1; }
+.page-research-conservation .conservation-lightbox-stage { width:min(100%,calc((100dvh - 190px)*var(--panel-ratio))); margin:auto; }
+.page-research-conservation #conservation-lightbox-caption { margin:14px 0 0; color:var(--muted); font-size:.8125rem; line-height:1.5; }
+html:has(.page-research-conservation .conservation-lightbox[open]) { overflow:hidden; }
 /* Separate proportional viewports exclude the embedded titles. Original pixels stay intact. */
 .page-research-conservation .conservation-panel { position:relative; display:block; overflow:hidden; }
 .page-research-conservation .conservation-panel img { position:absolute; display:block; width:100%; max-width:none; height:auto; left:0; }
@@ -34,6 +42,7 @@
 .page-research-conservation .restoration-card > p:not(.work-team) { margin:0; color:var(--muted); font-size:.9375rem; line-height:1.75; }
 .page-research-conservation .project-copy .text-link,
 .page-research-conservation .restoration-card .text-link { margin-top:22px; font-size:.875rem; }
+.page-research-conservation .project-copy .project-video-link { display:table; margin-top:12px; }
 .page-research-conservation .restoration-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
 .page-research-conservation .restoration-card { padding:28px; border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:0 0 14px 14px; background:white; }
 .page-research-conservation .theme-boundary { margin:20px 0 0; padding:16px 20px; border-left:4px solid var(--accent); border-radius:0 12px 12px 0; background:var(--pale); color:var(--muted); font-size:.9375rem; line-height:1.65; }

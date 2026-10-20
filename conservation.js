@@ -39,3 +39,38 @@
     document.addEventListener('visibilitychange', update);
   });
 })();
+
+// Enlarge each project's displayed panel without leaving the page.
+(() => {
+  const figures = [...document.querySelectorAll('a.feature-media')];
+  if (!figures.length) return;
+  const dialog = document.createElement('dialog');
+  dialog.className = 'conservation-lightbox';
+  dialog.setAttribute('aria-labelledby', 'conservation-lightbox-title');
+  dialog.setAttribute('aria-describedby', 'conservation-lightbox-caption');
+  dialog.innerHTML = '<div class="conservation-lightbox-heading"><h2 id="conservation-lightbox-title"></h2><button type="button" aria-label="Close enlarged image" autofocus>×</button></div><div class="conservation-lightbox-stage"></div><p id="conservation-lightbox-caption"></p>';
+  document.body.append(dialog);
+  const stage = dialog.querySelector('.conservation-lightbox-stage');
+  let trigger = null;
+  figures.forEach(figure => {
+    figure.setAttribute('aria-haspopup', 'dialog');
+    figure.addEventListener('click', event => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      trigger = figure;
+      const panel = figure.querySelector('.conservation-panel').cloneNode(true);
+      panel.querySelector('img').loading = 'eager';
+      stage.replaceChildren(panel);
+      stage.style.setProperty('--panel-ratio', panel.classList.contains('coast-panel') ? 1651 / 924 : 1651 / 982);
+      dialog.querySelector('h2').textContent = figure.closest('.project-feature').querySelector('h3').textContent;
+      dialog.querySelector('#conservation-lightbox-caption').textContent = figure.closest('figure').querySelector('figcaption').textContent;
+      dialog.showModal();
+    });
+  });
+  dialog.querySelector('button').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => {
+    const bounds = dialog.getBoundingClientRect();
+    if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
+  });
+  dialog.addEventListener('close', () => trigger?.focus({preventScroll:true}));
+})();
