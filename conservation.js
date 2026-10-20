@@ -42,7 +42,7 @@
 
 // Enlarge each project's displayed panel without leaving the page.
 (() => {
-  const figures = [...document.querySelectorAll('a.feature-media')];
+  const figures = [...document.querySelectorAll('a.feature-media, a.restoration-media')];
   if (!figures.length) return;
   const dialog = document.createElement('dialog');
   dialog.className = 'conservation-lightbox';
@@ -58,12 +58,16 @@
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       trigger = figure;
-      const panel = figure.querySelector('.conservation-panel').cloneNode(true);
-      panel.querySelector('img').loading = 'eager';
+      const sourcePanel = figure.querySelector('.conservation-panel');
+      const sourceImage = figure.querySelector('img');
+      const panel = (sourcePanel || sourceImage).cloneNode(true);
+      const image = sourcePanel ? panel.querySelector('img') : panel;
+      image.loading = 'eager';
       stage.replaceChildren(panel);
-      stage.style.setProperty('--panel-ratio', panel.classList.contains('coast-panel') ? 1651 / 924 : 1651 / 982);
-      dialog.querySelector('h2').textContent = figure.closest('.project-feature').querySelector('h3').textContent;
-      dialog.querySelector('#conservation-lightbox-caption').textContent = figure.closest('figure').querySelector('figcaption').textContent;
+      const ratio = sourcePanel ? (panel.classList.contains('coast-panel') ? 1651 / 924 : 1651 / 982) : Number(sourceImage.getAttribute('width')) / Number(sourceImage.getAttribute('height'));
+      stage.style.setProperty('--panel-ratio', ratio);
+      dialog.querySelector('h2').textContent = figure.closest('.project-feature, .restoration-card').querySelector('h3').textContent;
+      dialog.querySelector('#conservation-lightbox-caption').textContent = figure.closest('figure')?.querySelector('figcaption')?.textContent || sourceImage.alt;
       dialog.showModal();
     });
   });

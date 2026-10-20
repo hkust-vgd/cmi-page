@@ -45,6 +45,9 @@ html:has(.page-research-conservation .conservation-lightbox[open]) { overflow:hi
 .page-research-conservation .project-copy .project-video-link { display:table; margin-top:12px; }
 .page-research-conservation .restoration-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
 .page-research-conservation .restoration-card { padding:28px; border:1px solid var(--line); border-top:4px solid var(--accent); border-radius:0 0 14px 14px; background:white; }
+.page-research-conservation .restoration-media { display:block; aspect-ratio:16 / 9; margin-bottom:22px; overflow:hidden; border-radius:8px; background:var(--pale); cursor:zoom-in; }
+.page-research-conservation .restoration-media img { display:block; width:100%; height:100%; object-fit:cover; }
+.page-research-conservation .conservation-lightbox-stage > img { display:block; width:100%; height:auto; }
 .page-research-conservation .theme-boundary { margin:20px 0 0; padding:16px 20px; border-left:4px solid var(--accent); border-radius:0 12px 12px 0; background:var(--pale); color:var(--muted); font-size:.9375rem; line-height:1.65; }
 .page-research-conservation .theme-boundary b { color:var(--ink); }
 .page-research-conservation .conservation-detail::before { content:""; grid-column:1/-1; height:1px; background:var(--line); }
