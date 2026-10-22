@@ -199,22 +199,20 @@ document.addEventListener('keydown', event => {
 window.matchMedia('(max-width: 980px)').addEventListener('change', () => setMenuOpen(false));
 
 
-const heroImg = document.querySelector('.hero-visual img');
+const heroImgs = [...document.querySelectorAll('.hero-visual img')];
 const heroMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const heroDesktop = window.matchMedia('(min-width: 641px)');
 let heroTicking = false;
 
 function updateHero() {
   heroTicking = false;
-  if (!heroImg) return;
-  if (heroMotion.matches || !heroDesktop.matches) {
-    heroImg.style.transform = '';
-    return;
+  if (!heroImgs.length) return;
+  let transform = '';
+  if (!heroMotion.matches && heroDesktop.matches) {
+    const offset = window.scrollY * 0.35;
+    if (offset > 0) transform = `translate3d(0, ${offset}px, 0) scale(1.12)`;
   }
-  const offset = window.scrollY * 0.35;
-  heroImg.style.transform = offset > 0
-    ? `translate3d(0, ${offset}px, 0) scale(1.12)`
-    : '';
+  heroImgs.forEach(img => { img.style.transform = transform; });
 }
 
 window.addEventListener('scroll', () => {
@@ -224,10 +222,20 @@ window.addEventListener('scroll', () => {
   }
 }, { passive: true });
 
-if (heroImg) {
-  heroImg.addEventListener('animationend', () => {
-    heroImg.classList.add('hero-zoom-done');
+heroImgs.forEach(img => {
+  img.addEventListener('animationend', () => {
+    img.classList.add('hero-zoom-done');
   }, { once: true });
+});
+
+if (heroImgs.length > 1) {
+  let heroSlide = 0;
+  window.setInterval(() => {
+    if (heroMotion.matches || document.hidden) return;
+    heroImgs[heroSlide].classList.remove('is-active');
+    heroSlide = (heroSlide + 1) % heroImgs.length;
+    heroImgs[heroSlide].classList.add('is-active');
+  }, 6000);
 }
 
 const principles = document.querySelector('.edu-principles-window');
