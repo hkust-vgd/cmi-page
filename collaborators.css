@@ -1,0 +1,26 @@
+/* Collaborators page: the same scroll-in motion as the Education and research pages. The two figures rise in on load;
+   the map, its note, each group heading and the logo cards fade in and rise as they come into view, in page order
+   (collaborators.js), and the map's arcs only start drawing once the map is in view. A small script in the page head
+   hides these before the first paint, so nothing flickers; without JavaScript, or with reduced motion, everything is
+   simply shown. */
+html.col-anim .page-collaborators .collab-stats > div:not(.col-in),
+html.col-anim .page-collaborators .map-wrap:not(.col-in),
+html.col-anim .page-collaborators .map-note:not(.col-in),
+html.col-anim .page-collaborators .collab-group > h2:not(.col-in),
+html.col-anim .page-collaborators .collab-group .logo-card:not(.col-in) {
+  opacity: 0;
+  transform: translateY(20px);
+}
+html.col-anim .page-collaborators .map-wrap:not(.col-in) .arc {
+  animation-play-state: paused;
+}
+@media print {
+  html.col-anim .page-collaborators .collab-stats > div,
+  html.col-anim .page-collaborators .map-wrap,
+  html.col-anim .page-collaborators .map-note,
+  html.col-anim .page-collaborators .collab-group > h2,
+  html.col-anim .page-collaborators .collab-group .logo-card {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
