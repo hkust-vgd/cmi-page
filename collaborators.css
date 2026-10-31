@@ -24,3 +24,11 @@ html.col-anim .page-collaborators .map-wrap:not(.col-in) .arc {
     transform: none !important;
   }
 }
+/* Map labels on phones, where they are larger: the Mainland China label sits beside its pin, leaving room for the
+   Switzerland label under Germany's (on the left the two would run into one line). */
+@media (max-width: 640px) {
+  .page-collaborators .world .pin[data-region="chn"] text {
+    text-anchor: start;
+    transform: translate(12px, 14px);
+  }
+}
