@@ -6,7 +6,8 @@
   const items = thumbs.map((button) => ({
     type: button.dataset.type === "video" ? "video" : "image",
     src: button.dataset.src || "",
-    alt: button.dataset.alt || ""
+    alt: button.dataset.alt || "",
+    fit: button.dataset.fit === "contain" ? "contain" : ""
   }));
   if (!items.length) return;
 
@@ -47,14 +48,27 @@
     return kind + " · " + position + " of " + items.length;
   }
 
-  function fitImage(image) {
+  const fitTokens = new WeakMap();
+
+  function fitImage(image, fit) {
+    const token = (fitTokens.get(image) || 0) + 1;
+    fitTokens.set(image, token);
     const apply = () => {
-      const portrait = image.naturalWidth > 0 && image.naturalHeight > image.naturalWidth;
-      image.classList.toggle("is-portrait", portrait);
-      image.classList.toggle("is-landscape", !portrait && image.naturalWidth > 0);
+      if (fitTokens.get(image) !== token) return;
+      image.classList.remove("is-portrait", "is-landscape", "is-contain");
+      if (fit === "contain") {
+        image.classList.add("is-contain");
+        return;
+      }
+      if (!image.naturalWidth) return;
+      const portrait = image.naturalHeight > image.naturalWidth;
+      image.classList.add(portrait ? "is-portrait" : "is-landscape");
     };
     if (image.complete && image.naturalWidth) apply();
-    else image.addEventListener("load", apply, { once: true });
+    else {
+      image.classList.remove("is-portrait", "is-landscape", "is-contain");
+      image.addEventListener("load", apply, { once: true });
+    }
   }
 
   function paint(image, video, item) {
@@ -64,13 +78,13 @@
     if (isVideo) {
       image.removeAttribute("src");
       image.alt = "";
-      image.classList.remove("is-portrait", "is-landscape");
+      image.classList.remove("is-portrait", "is-landscape", "is-contain");
       setVideo(video, item.src);
     } else {
       clearVideo(video);
       image.src = item.src;
       image.alt = item.alt;
-      fitImage(image);
+      fitImage(image, item.fit);
     }
   }
 
